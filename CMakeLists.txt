@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.7)
 
-set(PROJECT_NAME SDL2Test)
+set(PROJECT_NAME DungeonCrawlerEngine)
 set(CMAKE_TOOLCHAIN_FILE "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake")
 
 project(${PROJECT_NAME})
