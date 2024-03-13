@@ -1,6 +1,8 @@
 {
   "dependencies": [
     "sdl2",
-    "gamenetworkingsockets"
+    "sdl2-image",
+    "gamenetworkingsockets",
+    "glew"
   ]
 }

@@ -10,7 +10,7 @@ int SDL_main(int argc, char* argv[])
         return -1;
     }
 
-    Game game = Game();
+    Engine::Game game = Engine::Game();
 
     // Quit SDL
     SDL_Quit();

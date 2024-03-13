@@ -8,6 +8,7 @@ project(${PROJECT_NAME})
 # List files
 set(SOURCE_FILES 
     src/engine/game.cpp
+    src/engine/sdl_event_dispatcher.cpp
 
     # Input
     src/engine/input/input.cpp
@@ -16,10 +17,16 @@ set(SOURCE_FILES
     src/engine/graphics/graphics.cpp
     src/engine/graphics/render_pipeline.cpp
     src/engine/graphics/game_window.cpp
+    src/engine/graphics/sprite.cpp
+    src/engine/graphics/texture.cpp
+    src/engine/graphics/render_texture.cpp
+    src/engine/graphics/quad.cpp
 )
 
 set(HEADER_FILES 
     src/engine/game.h
+    src/engine/sdl_event_dispatcher.h
+    src/engine/math/math_types.h
 
     # Input
     src/engine/input/input.h
@@ -28,19 +35,22 @@ set(HEADER_FILES
     src/engine/graphics/graphics.h
     src/engine/graphics/render_pipeline.h
     src/engine/graphics/game_window.h
+    src/engine/graphics/sprite.h
+    src/engine/graphics/texture.h
+    src/engine/graphics/render_texture.h
+    src/engine/graphics/quad.h
 )
 
 source_group(TREE "${CMAKE_SOURCE_DIR}/src" PREFIX "Source Files" FILES ${SOURCE_FILES})
 source_group(TREE "${CMAKE_SOURCE_DIR}/src" PREFIX "Header Files" FILES ${HEADER_FILES})
 
-# Include SDL
+# Include packages
+
+find_package(GameNetworkingSockets REQUIRED)
+find_package(GLEW REQUIRED)
+find_package(SDL2_image CONFIG REQUIRED)
 find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIRS})
-
-# Include GameNetworkingSockets
-find_package(GameNetworkingSockets REQUIRED)
-
-
 
 # Build project
 add_executable(${PROJECT_NAME} ${SOURCE_FILES} ${HEADER_FILES} src/main.cpp)
@@ -54,6 +64,8 @@ elseif (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -pedantic -O3)
 endif()
 
+set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 20)
+
 # Add SDL to target
 
 # SDL2::SDL2main may or may not be available. It is e.g. required by Windows GUI applications
@@ -65,3 +77,12 @@ endif()
 # Link libraries
 target_link_libraries(${PROJECT_NAME} PRIVATE SDL2::SDL2)
 target_link_libraries(${PROJECT_NAME} PRIVATE GameNetworkingSockets::shared)
+target_link_libraries(${PROJECT_NAME} PRIVATE GLEW::GLEW)
+target_link_libraries(${PROJECT_NAME} PRIVATE SDL2_image::SDL2_image)
+
+# Copy resources on build
+add_custom_command(
+        TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+                ${CMAKE_SOURCE_DIR}/resources
+                ${CMAKE_CURRENT_BINARY_DIR}/resources)
