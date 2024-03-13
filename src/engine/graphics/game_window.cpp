@@ -55,7 +55,7 @@ namespace Engine::Graphics
 	{
 		if (e.type == SDL_WINDOWEVENT)
 		{
-			switch (e.m_window.event)
+			switch (e.window.event)
 			{
 			case SDL_WINDOWEVENT_CLOSE:
 				invokeWindowEvent(WindowEvent::CLOSE);
@@ -67,7 +67,7 @@ namespace Engine::Graphics
 				invokeWindowEvent(WindowEvent::MAXIMIZE);
 				break;
 			case SDL_WINDOWEVENT_SIZE_CHANGED:
-				invokeWindowEvent(WindowEvent::RESIZE, WindowEventData(e.m_window.data1, e.m_window.data2));
+				invokeWindowEvent(WindowEvent::RESIZE, WindowEventData(e.window.data1, e.window.data2));
 				break;
 			case SDL_WINDOWEVENT_SHOWN:
 				invokeWindowEvent(WindowEvent::SHOW);

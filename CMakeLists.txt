@@ -9,6 +9,7 @@ project(${PROJECT_NAME})
 set(SOURCE_FILES 
     src/engine/game.cpp
     src/engine/sdl_event_dispatcher.cpp
+    src/engine/fileio.cpp
 
     # Input
     src/engine/input/input.cpp
@@ -27,6 +28,7 @@ set(HEADER_FILES
     src/engine/game.h
     src/engine/sdl_event_dispatcher.h
     src/engine/math/math_types.h
+    src/engine/fileio.h
 
     # Input
     src/engine/input/input.h

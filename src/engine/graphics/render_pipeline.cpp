@@ -22,11 +22,15 @@ namespace Engine::Graphics
 		// Draw game
 		//graphics->drawSprite(Sprite(), Vector2Int(), Vector2Int());
 		
+
+
+
+
 		// Switch to screen target
 		graphics->setRenderTarget(nullptr);
 		graphics->clear();
 
-		graphics->drawTexture(m_mainTexture, m_mainTexture->getRect(), graphics->getWindow()->getRect(240, 160));
+		graphics->blit(m_mainTexture);
 		graphics->present();
 	}
 }
