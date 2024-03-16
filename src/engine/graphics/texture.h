@@ -16,9 +16,10 @@ namespace Engine::Graphics
 	protected:
 		friend class Graphics;
 		
-		const uint16_t m_width;
-		const uint16_t m_height;
-		const uint32_t m_texture;
+		uint16_t m_width;
+		uint16_t m_height;
+
+		uint32_t m_texture;
 
 		Texture(uint32_t texture, uint16_t width, uint16_t height);
 	
@@ -27,6 +28,6 @@ namespace Engine::Graphics
 		uint16_t getHeight() const;
 		Rect getRect() const;
 
-		~Texture();
+		Texture();
 	};
 }

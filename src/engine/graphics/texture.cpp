@@ -1,5 +1,4 @@
 #include "texture.h"
-#include "GL/glew.h"
 
 namespace Engine::Graphics
 {
@@ -25,8 +24,8 @@ namespace Engine::Graphics
 		return Rect(0, 0, getWidth(), getHeight());
 	}
 
-	Texture::~Texture()
+	// This shouldn't be used
+	Texture::Texture()
 	{
-		glDeleteTextures(1, &m_texture);
 	}
 }

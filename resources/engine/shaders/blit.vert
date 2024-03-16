@@ -1,7 +1,7 @@
 #version 3.3
 
-layout (location = 0) in vec2 aTexCoord; 
-layout (location = 1) in vec2 aPosition;
+in vec2 aTexCoord; 
+in vec2 aPosition;
 
 out vec2 TexCoord;
 

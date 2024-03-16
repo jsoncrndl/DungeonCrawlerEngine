@@ -9,10 +9,14 @@ project(${PROJECT_NAME})
 set(SOURCE_FILES 
     src/engine/game.cpp
     src/engine/sdl_event_dispatcher.cpp
-    src/engine/fileio.cpp
+
+    # Resources
+    src/engine/resource/resource_management.cpp
+    src/engine/resource/texture_importer.cpp
+    src/engine/resource/shader_importer.cpp
+    src/engine/resource/material_importer.cpp
 
     # Input
-    src/engine/input/input.cpp
 
     # Graphics
     src/engine/graphics/graphics.cpp
@@ -22,13 +26,21 @@ set(SOURCE_FILES
     src/engine/graphics/texture.cpp
     src/engine/graphics/render_texture.cpp
     src/engine/graphics/quad.cpp
+    src/engine/graphics/material.cpp
+    src/engine/graphics/shader.cpp
 )
 
 set(HEADER_FILES 
     src/engine/game.h
     src/engine/sdl_event_dispatcher.h
     src/engine/math/math_types.h
-    src/engine/fileio.h
+
+    # Resources
+    src/engine/resource/fileio.h
+    src/engine/resource/registry.h
+    src/engine/resource/texture_importer.h
+    src/engine/resource/shader_importer.h
+    src/engine/resource/material_importer.h
 
     # Input
     src/engine/input/input.h
@@ -41,6 +53,8 @@ set(HEADER_FILES
     src/engine/graphics/texture.h
     src/engine/graphics/render_texture.h
     src/engine/graphics/quad.h
+    src/engine/graphics/material.h
+    src/engine/graphics/shader.h
 )
 
 source_group(TREE "${CMAKE_SOURCE_DIR}/src" PREFIX "Source Files" FILES ${SOURCE_FILES})

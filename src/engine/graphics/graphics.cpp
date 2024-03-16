@@ -1,20 +1,33 @@
-#include "graphics.h"
 #include <iostream>
+#include <SDL_image.h>
+#include "graphics.h"
 
 namespace Engine::Graphics
 {
-	void Graphics::loadShaders()
+	void Graphics::loadShaders(std::shared_ptr<Resources::Registry<Shader, Resources::ShaderImporter>> shaders)
 	{
+		std::vector<uint32_t> textureObjects(shaders->entries().size());
+		(shaders->entries().size(), textureObjects.data());
 
+		for (int i = 0; auto& shader : shaders->entries())
+		{
+			loadShader(shader.second);
+			++i;
+		}
 	}
-	void Graphics::compileShaders()
+
+	void Graphics::loadTextures(std::shared_ptr<Resources::Registry<Texture, Resources::TextureImporter>> textures)
 	{
+		std::vector<uint32_t> textureObjects(textures->entries().size());
+		glGenTextures(textures->entries().size(), textureObjects.data());
 
+		for (int i = 0; auto& texture : textures->entries())
+		{
+			loadTexture(texture.second, (std::filesystem::path(textures->getContentPath()) / "/" / texture.first).string(), textureObjects[i]);
+			++i;
+		}
 	}
-	void Graphics::loadTextures()
-	{
 
-	}
 	void Graphics::loadMaterials()
 	{
 	}
@@ -30,7 +43,7 @@ namespace Engine::Graphics
 		glBindFramebuffer(GL_FRAMEBUFFER, target->m_fbo);
 	}
 
-	void Graphics::drawSprite(Sprite texture, Vector2Int position, Vector2Int scale)
+	void Graphics::drawSprite(Sprite texture, Vector2Int position, Vector2Int scale, Material* material)
 	{
 	}
 
@@ -68,18 +81,8 @@ namespace Engine::Graphics
 		return m_window;
 	}
 
-	std::shared_ptr<Texture> Graphics::loadTexture(std::string file)
-	{
-		
-
-		//SDL_Texture* texture = ;
-		//return std::shared_ptr<Texture>(new Texture)
-		return nullptr;
-	}
-
 	std::shared_ptr<RenderTexture> Graphics::createRenderTexture(uint16_t width, uint16_t height)
 	{
-
 		// Make a new texture
 		uint32_t texture;
 		glGenTextures(1, &texture);
@@ -104,11 +107,36 @@ namespace Engine::Graphics
 		// Unbind everything
 		glBindTexture(GL_TEXTURE_2D, 0);
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-		return std::shared_ptr<RenderTexture>(new RenderTexture(fbo, texture, width, height));
+		//new RenderTexture(fbo, texture, width, height)
+		return std::shared_ptr<RenderTexture>();
 	}
 
-	Graphics::Graphics(std::shared_ptr<GameWindow> window) : 
+	void Graphics::loadTexture(Texture& texture, std::string path, uint32_t textureObject)
+	{
+		SDL_Surface* surface = IMG_Load(path.c_str());
+
+		glBindTexture(GL_TEXTURE_2D, textureObject);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, surface->w, surface->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, surface->pixels);
+
+		texture.m_width = static_cast<uint16_t>(surface->w);
+		texture.m_height = static_cast<uint16_t>(surface->h);
+		texture.m_texture = textureObject;
+
+		SDL_FreeSurface(surface);
+	}
+
+	void Graphics::loadShader(Shader& texture)
+	{
+		
+	}
+
+	Graphics::Graphics(std::shared_ptr<GameWindow> window) :
 		m_window(window)
 		//m_renderer(SDL_CreateRenderer(m_window->m_window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_TARGETTEXTURE))
 	{

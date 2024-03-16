@@ -1,6 +1,9 @@
-#include "iostream"
+#include <iostream>
 #include "SDL.h"
 #include "engine/game.h"
+#include "engine/graphics/texture.h"
+#include "engine/resource/texture_importer.h"
+#include "engine/resource/registry.h"
 
 int SDL_main(int argc, char* argv[])
 {
@@ -9,6 +12,8 @@ int SDL_main(int argc, char* argv[])
         SDL_Log("SDL could not initialize! SDL_Error: %s", SDL_GetError());
         return -1;
     }
+
+    using namespace Engine;
 
     Engine::Game game = Engine::Game();
 

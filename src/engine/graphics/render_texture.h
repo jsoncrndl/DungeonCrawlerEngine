@@ -18,5 +18,6 @@ namespace Engine::Graphics
 		uint32_t m_fbo;
 
 		RenderTexture(uint32_t fbo, uint32_t texture, uint16_t width, uint16_t height);
+		~RenderTexture();
 	};
 }

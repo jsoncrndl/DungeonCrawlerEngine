@@ -2,15 +2,20 @@
 
 #include <memory>
 #include <string>
-
-#include "SDL.h"
 #include <GL/glew.h>
+#include <SDL.h>
+
 #include "game_window.h"
 #include "../math/math_types.h"
 #include "render_texture.h"
 #include "sprite.h"
 #include "texture.h"
 #include "quad.h"
+#include "../resource/registry.h"
+#include "../resource/texture_importer.h"
+#include "../resource/shader_importer.h"
+#include "material.h"
+#include "shader.h"
 
 
 /// <summary>
@@ -28,16 +33,16 @@ namespace Engine::Graphics
 		std::shared_ptr<Quad> quad;
 
 		// Load a texture from an image
-		std::shared_ptr<Texture> loadTexture(std::string path);
+		void loadTexture(Texture& texture, std::string path, uint32_t textureObject);
+		void loadShader(Shader& texture);
 
 	public:
 		Graphics(std::shared_ptr<GameWindow> m_window);
 		~Graphics();
 
-		void loadShaders();
-		void compileShaders();
+		void loadShaders(std::shared_ptr<Resources::Registry<Shader, Resources::ShaderImporter>> registry);
 
-		void loadTextures();
+		void loadTextures(std::shared_ptr<Resources::Registry<Texture, Resources::TextureImporter>> registry);
 
 		void loadMaterials();
 
@@ -45,7 +50,7 @@ namespace Engine::Graphics
 		void setRenderTarget(std::shared_ptr<RenderTexture> target);
 
 		// Draw a sprite to the current render target
-		void drawSprite(Sprite texture, Vector2Int position, Vector2Int scale);
+		void drawSprite(Sprite texture, Vector2Int position, Vector2Int scale, Material* material);
 
 		void drawTexture(std::shared_ptr<Texture> texture, Rect src, Rect dst);
 
