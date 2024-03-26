@@ -23,6 +23,7 @@
 /// </summary>
 namespace Engine::Graphics
 {
+
 	class Graphics
 	{
 	private:
@@ -30,11 +31,21 @@ namespace Engine::Graphics
 		//SDL_Renderer* m_renderer;
 		SDL_GLContext m_glContext;
 
+		std::shared_ptr<Shader> m_blitShader;
+		std::shared_ptr<Shader> m_defaultSpriteShader;
+
+		GLuint vertices;
+		GLuint texCoords;
+		GLuint indices;
+
 		std::shared_ptr<Quad> quad;
+		std::shared_ptr<RenderTexture> m_currentTarget;
 
 		// Load a texture from an image
-		void loadTexture(Texture& texture, std::string path, uint32_t textureObject);
-		void loadShader(Shader& texture);
+		void loadTexture(std::shared_ptr<Texture> texture, std::string path, uint32_t textureObject);
+		bool loadShader(std::shared_ptr<Shader> texture);
+
+		void updateViewport();
 
 	public:
 		Graphics(std::shared_ptr<GameWindow> m_window);
@@ -50,14 +61,20 @@ namespace Engine::Graphics
 		void setRenderTarget(std::shared_ptr<RenderTexture> target);
 
 		// Draw a sprite to the current render target
-		void drawSprite(Sprite texture, Vector2Int position, Vector2Int scale, Material* material);
+		void drawSprite(const Sprite& texture, const Vector2& position, const Vector2& scale, const std::shared_ptr<Material>& material);
 
-		void drawTexture(std::shared_ptr<Texture> texture, Rect src, Rect dst);
+		void drawTexture(const std::shared_ptr<Texture> texture, const Rect& src, const Rect& dst, const std::shared_ptr<Material>& material);
 
 		void blit(std::shared_ptr<Texture> texture);
 
+		// Perform any post content loading setup such as loading engine shaders
+		void postLoad();
+
 		// Clear the screen
 		void clear();
+
+		// Set the clear color and clear the screen
+		void clear(float r, float g, float b);
 
 		// Display the texture to the screen
 		void present();

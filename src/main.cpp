@@ -1,9 +1,7 @@
 #include <iostream>
 #include "SDL.h"
-#include "engine/game.h"
-#include "engine/graphics/texture.h"
-#include "engine/resource/texture_importer.h"
-#include "engine/resource/registry.h"
+#include "engine/engine.h"
+#include "engine/math/math_types.h"
 
 int SDL_main(int argc, char* argv[])
 {
@@ -13,12 +11,11 @@ int SDL_main(int argc, char* argv[])
         return -1;
     }
 
-    using namespace Engine;
-
-    Engine::Game game = Engine::Game();
-
+    Engine::RuntimeEngine::create()->start();
+    
     // Quit SDL
     SDL_Quit();
 
     return 0;
 }
+

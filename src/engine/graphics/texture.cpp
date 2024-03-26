@@ -9,17 +9,17 @@ namespace Engine::Graphics
 	{
 	}
 
-	uint16_t Texture::getWidth() const
+	const uint16_t& Texture::getWidth() const
 	{
 		return m_width;
 	}
 
-	uint16_t Texture::getHeight() const
+	const uint16_t& Texture::getHeight() const
 	{
 		return m_height;
 	}
 
-	Rect Texture::getRect() const
+	const Rect Texture::getRect() const
 	{
 		return Rect(0, 0, getWidth(), getHeight());
 	}

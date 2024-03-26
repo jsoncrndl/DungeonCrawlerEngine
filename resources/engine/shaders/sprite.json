@@ -1,0 +1,20 @@
+{
+  "vert": "sprite",
+  "frag": "sprite",
+
+  "uniforms": [
+
+    {
+      "name": "vertexTransform",
+      "type": "mat3"
+    },
+    {
+      "name": "texCoordsTransform",
+      "type": "mat3"
+    },
+    {
+      "name": "mainTexture",
+      "type": "sampler2D"
+    }
+  ]
+}

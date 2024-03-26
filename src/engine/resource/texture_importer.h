@@ -2,6 +2,7 @@
 
 #include <string>
 #include "../graphics/texture.h"
+#include "registry.h"
 
 namespace Engine::Resources
 {
@@ -9,6 +10,6 @@ namespace Engine::Resources
 	{
 		
 	public:
-		static bool loadResource(Graphics::Texture& texture, std::string fileLocation);
+		static std::shared_ptr<Graphics::Texture> loadResource(const ResourceLocation& registryLocation, std::string fileLocation);
 	};
 }

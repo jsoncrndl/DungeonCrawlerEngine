@@ -70,6 +70,9 @@ namespace Engine {
 			// Returns a rect with a width:height ratio that best fits the window viewport
 			Rect getRect(uint16_t width, uint16_t height) const;
 
+			const uint16_t& getWidth();
+			const uint16_t& getHeight();
+
 			void registerWindowEventListener(WindowEvent event, std::function<void(const WindowEventData&)>);
 			~GameWindow();
 		};

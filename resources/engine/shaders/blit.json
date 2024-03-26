@@ -1,13 +1,11 @@
 {
-    "vert": "blit.vert",
-    "frag": "blit.frag",
-    
-    "uniforms": {
-        "sampler2D": [
-            {
-                "name": "blitTexture",
-                "layout": 1
-            }
-        ]
+    "vert": "blit",
+    "frag": "blit",
+
+  "uniforms": [
+    {
+      "name": "blitTexture",
+      "type": "sampler2D"
     }
+  ]
 }

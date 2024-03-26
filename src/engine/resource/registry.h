@@ -11,21 +11,26 @@
 
 namespace Engine::Resources
 {
-	struct ResourceLocation
+
+	class ResourceLocation
 	{
+	private:
 		std::string project;
 		std::string location;
-
+	public:
 		ResourceLocation(std::string name);
 		ResourceLocation(std::string project, std::string location);
+
+		const std::string getProject() const;
+		const std::string getLocation() const;
 
 		std::string string();
 	};
 
 	template <typename T, typename I>
-	concept ResourceImporter = requires(bool b, T & t)
+	concept ResourceImporter = requires(bool b, std::shared_ptr<T> t, ResourceLocation r)
 	{
-		b = I::loadResource(t, "");
+		t = I::loadResource(r, "");
 	};
 
 	template <typename T, typename I>
@@ -36,13 +41,13 @@ namespace Engine::Resources
 		friend Importer;
 		ResourceLocation m_name;
 
-		std::unordered_map<std::string, T> m_entries;
+		std::unordered_map<std::string, std::shared_ptr<T>> m_entries;
 
 	public:
 		Registry(ResourceLocation name);
 		void load();
-		std::unordered_map<std::string, T> entries();
-		T* get(std::string location);
+		std::unordered_map<std::string, std::shared_ptr<T>> entries();
+		std::shared_ptr<T> get(std::string location);
 		std::string getContentPath();
 		std::string getLocation();
 	};
@@ -63,31 +68,28 @@ namespace Engine::Resources
 
 		for (const std::string& path : paths)
 		{
-			T resource;
+			std::shared_ptr<T> resource = Importer::loadResource(m_name, path);
 
-			bool result = Importer::loadResource(resource, path);
-
-			if (result)
+			if (resource != nullptr)
 			{
-
 				std::filesystem::path relative = std::filesystem::relative(path, registryPath);
 				std::string fileName = relative.replace_extension().string();
 
-
-				m_entries[fileName] = std::move(resource);
+				m_entries[fileName] = resource;
 			}
 		}
 	}
+
 	template<typename T, typename I>
 		requires ResourceImporter<T, I>
-	inline std::unordered_map<std::string, T> Registry<T, I>::entries()
+	inline std::unordered_map<std::string, std::shared_ptr<T>> Registry<T, I>::entries()
 	{
 		return m_entries;
 	}
 
 	template<typename T, typename I>
 		requires ResourceImporter<T, I>
-	inline T* Registry<T, I>::get(std::string location)
+	inline std::shared_ptr<T> Registry<T, I>::get(std::string location)
 	{
 		if (m_entries.count(location) == 0)
 		{
@@ -95,7 +97,7 @@ namespace Engine::Resources
 		}
 		else
 		{
-			return &(m_entries[location]);
+			return (m_entries[location]);
 		}	
 	}
 
@@ -110,6 +112,6 @@ namespace Engine::Resources
 		requires ResourceImporter<T, I>
 	inline std::string Registry<T, I>::getContentPath()
 	{
-		return (std::filesystem::current_path() / "resources" / m_name.project / m_name.location).string();
+		return (std::filesystem::current_path() / "resources" / m_name.getProject() / m_name.getLocation()).string();
 	}
 }

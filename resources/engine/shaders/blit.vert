@@ -1,7 +1,7 @@
-#version 3.3
+#version 330 core
 
-in vec2 aTexCoord; 
-in vec2 aPosition;
+layout(location = 0) in vec2 aPosition;
+layout(location = 1) in vec2 aTexCoord;
 
 out vec2 TexCoord;
 

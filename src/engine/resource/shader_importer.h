@@ -5,7 +5,8 @@ namespace Engine::Resources
 {
 	class ShaderImporter
 	{
+		friend class Resources::ShaderImporter;
 	public:
-		static bool loadResource(Graphics::Shader& shader, std::string fileLocation);
+		static std::shared_ptr<Graphics::Shader> loadResource(const ResourceLocation& registryLocation, std::string fileLocation);
 	};
 }

@@ -12,6 +12,16 @@ namespace Engine::Resources
     {
     }
 
+    const std::string ResourceLocation::getProject() const
+    {
+        return project;
+    }
+
+    const std::string ResourceLocation::getLocation() const
+    {
+        return location;
+    }
+
     std::string ResourceLocation::string()
     {
         return project + ":" + location;

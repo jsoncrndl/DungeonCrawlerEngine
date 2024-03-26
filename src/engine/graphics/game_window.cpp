@@ -51,6 +51,16 @@ namespace Engine::Graphics
 		return Rect(widthDifference / 2, heightDifference / 2, rectWidth, rectHeight);
 	}
 
+	const uint16_t& GameWindow::getWidth()
+	{
+		return m_width;
+	}
+
+	const uint16_t& GameWindow::getHeight()
+	{
+		return m_height;
+	}
+
 	void GameWindow::handleEvent(SDL_Event e)
 	{
 		if (e.type == SDL_WINDOWEVENT)

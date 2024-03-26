@@ -16,8 +16,10 @@ namespace Engine::Graphics
 		friend class Graphics;
 	
 		uint32_t m_fbo;
+		uint32_t m_depthTexture;
 
-		RenderTexture(uint32_t fbo, uint32_t texture, uint16_t width, uint16_t height);
+		RenderTexture(uint32_t fbo, uint32_t colorTexture, uint32_t depthTexture, uint16_t width, uint16_t height);
+	public:
 		~RenderTexture();
 	};
 }

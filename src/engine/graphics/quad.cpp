@@ -1,54 +1,72 @@
+#include <GL/glew.h>
+
 #include "quad.h"
-#include "GL/glew.h"
 
 namespace Engine::Graphics {
-	Quad::Quad(uint32_t vertices, uint32_t texCoords, uint32_t indices) : vertices(vertices), texCoords(texCoords), indices(indices)
-	{
-	}
+
+	// Define data
+	GLfloat Quad::vertexArray[] = {
+		-1, -1,
+		1, -1,
+		1, 1,
+		-1, 1
+	};
+
+	GLfloat Quad::texCoordsArray[] = {
+		0, 0,
+		1, 0,
+		1, 1,
+		0, 1
+	};
+
+	GLubyte Quad::indexArray[] = {
+		 0, 1, 2,
+		 0, 2, 3
+	};
 
 	std::shared_ptr<Quad> Quad::create()
 	{
-
-		// Define data
-		float vertices[] = {
-			-1, -1,
-			1, -1,
-			1, 1,
-			- 1, 1
-		};
-
-		float texCoords[] = {
-			0, 0,
-			1, 0,
-			1, 1,
-			0, 1
-		};
-
-		uint8_t indices[] = {
-			 0, 1, 2,
-			 0, 2, 3
-		};
-
+		std::shared_ptr<Quad> quad = std::shared_ptr<Quad>(new Quad());
 
 		// Make buffers and buffer data
 
-		uint32_t vertexBuffer;
-		glGenBuffers(1, &vertexBuffer);
-		glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+		glGenBuffers(1, &quad->vertices);
+		glBindBuffer(GL_ARRAY_BUFFER, quad->vertices);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 8, vertexArray, GL_STATIC_DRAW);
 
-		uint32_t texCoordsBuffer;
-		glGenBuffers(1, &texCoordsBuffer);
-		glBindBuffer(GL_ARRAY_BUFFER, texCoordsBuffer);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(texCoords), vertices, GL_STATIC_DRAW);
+		glGenBuffers(1, &quad->texCoords);
+		glBindBuffer(GL_ARRAY_BUFFER, quad->texCoords);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 8, texCoordsArray, GL_STATIC_DRAW);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-		uint32_t indexBuffer;
-		glGenBuffers(1, &indexBuffer);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+		glGenBuffers(1, &quad->indices);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, quad->indices);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLubyte) * 6, indexArray, GL_STATIC_DRAW);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-		return std::shared_ptr<Quad>(new Quad(vertexBuffer, texCoordsBuffer, indexBuffer));
+		glGenVertexArrays(1, &quad->vao);
+		glBindVertexArray(quad->vao);
+
+		// Set the vertex positions
+		const uint32_t aPos = 0;
+		const uint32_t aTexCoord = 1;
+
+		glBindBuffer(GL_ARRAY_BUFFER, quad->vertices);
+		glEnableVertexAttribArray(aPos);
+		glVertexAttribPointer(aPos, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), nullptr);
+
+		glBindBuffer(GL_ARRAY_BUFFER, quad->texCoords);
+		glEnableVertexAttribArray(aTexCoord);
+		glVertexAttribPointer(aTexCoord, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), nullptr);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+		return quad;
+	}
+	std::shared_ptr<QuadBuffer> QuadBuffer::create(uint8_t amount)
+	{
+
+
+
+		return std::shared_ptr<QuadBuffer>();
 	}
 }

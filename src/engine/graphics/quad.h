@@ -11,12 +11,24 @@ namespace Engine::Graphics
 		friend class Graphics;
 	private:
 
-		uint32_t vertices;
-		uint32_t texCoords;
-		uint32_t indices;
+		GLuint vertices;
+		GLuint texCoords;
+		GLuint indices;
+		GLuint vao;
 
-		Quad(uint32_t vertices, uint32_t texCoords, uint32_t indices);
+		// Define data
+		static float vertexArray[];
+		static float texCoordsArray[];
+		static GLubyte indexArray[];
 
 		static std::shared_ptr<Quad> create();
+	};
+
+	class QuadBuffer
+	{
+		friend class Graphics;
+
+		static std::shared_ptr<QuadBuffer> create(uint8_t size);
+
 	};
 }
