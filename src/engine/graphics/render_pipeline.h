@@ -15,6 +15,8 @@ namespace Engine::Graphics
 		std::shared_ptr<RenderTexture> m_mainTexture;
 		std::shared_ptr<RenderTexture> m_swapTexture;
 		std::shared_ptr<Texture> m_testTexture;
+		std::shared_ptr<Texture> m_grid;
+
 
 	public:
 		RenderPipeline();

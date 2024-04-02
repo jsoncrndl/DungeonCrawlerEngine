@@ -29,6 +29,11 @@ namespace Engine::Graphics
 		SDL_DestroyWindow(m_window);
 	}
 
+	void GameWindow::setTitle(std::string title)
+	{
+		SDL_SetWindowTitle(m_window, title.data());
+	}
+
 	Rect GameWindow::getRect() const
 	{
 		return Rect(0, 0, m_width, m_height);

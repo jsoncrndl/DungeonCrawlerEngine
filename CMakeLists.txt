@@ -9,6 +9,7 @@ project(${PROJECT_NAME})
 set(SOURCE_FILES 
     src/engine/engine.cpp
     src/engine/sdl_event_dispatcher.cpp
+    src/engine/math/math_types.cpp
 
     # Resources
     src/engine/resource/registry.cpp
@@ -29,6 +30,15 @@ set(SOURCE_FILES
     src/engine/graphics/quad.cpp
     src/engine/graphics/material.cpp
     src/engine/graphics/shader.cpp
+
+    # Components
+    src/engine/ecs/components/component.cpp
+    src/engine/ecs/components/component_registry.cpp
+    src/engine/ecs/components/component_visitor.cpp
+    src/engine/ecs/components/find_deleted_component_visitor.cpp
+
+
+    src/engine/ecs/components/transform.cpp
 )
 
 set(HEADER_FILES 
@@ -57,6 +67,15 @@ set(HEADER_FILES
     src/engine/graphics/quad.h
     src/engine/graphics/material.h
     src/engine/graphics/shader.h
+
+    # Components
+    src/engine/ecs/components/component.h
+    src/engine/ecs/components/component_registry.h
+    src/engine/ecs/components/component_pool.h
+    src/engine/ecs/components/component_visitor.h
+    src/engine/ecs/components/find_deleted_component_visitor.h
+
+    src/engine/ecs/components/transform.h
 )
 
 source_group(TREE "${CMAKE_SOURCE_DIR}/src" PREFIX "Source Files" FILES ${SOURCE_FILES})
@@ -67,6 +86,7 @@ source_group(TREE "${CMAKE_SOURCE_DIR}/src" PREFIX "Header Files" FILES ${HEADER
 find_package(GameNetworkingSockets REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(RapidJSON CONFIG REQUIRED)
+find_package(rttr CONFIG REQUIRED)
 find_package(SDL2_image CONFIG REQUIRED)
 find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIRS})
@@ -99,6 +119,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE GameNetworkingSockets::shared)
 target_link_libraries(${PROJECT_NAME} PRIVATE GLEW::GLEW)
 target_link_libraries(${PROJECT_NAME} PRIVATE SDL2_image::SDL2_image)
 target_link_libraries(${PROJECT_NAME} PRIVATE rapidjson)
+target_link_libraries(${PROJECT_NAME} PRIVATE RTTR::Core)
 
 # Copy resources on build
 add_custom_command(

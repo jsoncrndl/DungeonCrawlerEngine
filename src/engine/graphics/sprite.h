@@ -19,6 +19,7 @@ namespace Engine::Graphics
 
 		const std::shared_ptr<Texture>& getTexture() const;
 		const Rect& getRect() const;
+		const int pixelsPerUnit = 16;
 	};
 
 	class Pivot

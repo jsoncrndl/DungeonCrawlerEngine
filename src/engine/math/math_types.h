@@ -1,4 +1,6 @@
 #pragma once
+#include <array>
+#include <string>
 
 namespace Engine
 {
@@ -44,8 +46,48 @@ namespace Engine
         Vector2Int& operator/=(int scalar);
         int dot(const Vector2Int& other) const;
         float magnitude() const;
-        Vector2Int normalized() const;
         float angle(const Vector2Int& other) const;
+    };
+
+    class Matrix3x3
+    {
+        struct MatrixRowView
+        {
+            friend class Matrix3x3;
+        private:
+            float* m_start;
+            MatrixRowView(float* start);
+
+        public:
+            float& operator[](uint8_t offset);
+        };
+
+    public:
+        static const Matrix3x3 identity;
+
+    private:
+        std::array<float, 9> m_data;
+
+        
+    public:
+
+        Matrix3x3(std::array<float, 9> data);
+
+        const float* getData() const;
+        
+        Matrix3x3 transposed() const;
+        void transpose();
+
+        std::string toString() const;
+        
+        MatrixRowView operator[](uint8_t offset);
+        
+        Matrix3x3 operator+(const Matrix3x3& other) const;
+        Matrix3x3 operator-(const Matrix3x3& other) const;
+        Matrix3x3 operator*(const Matrix3x3& other) const;
+        Matrix3x3& operator+=(const Matrix3x3& other);
+        Matrix3x3& operator*=(const Matrix3x3& other);
+        Matrix3x3& operator-=(const Matrix3x3& other);
     };
 
     class Rect
@@ -68,6 +110,9 @@ namespace Engine
         uint32_t getHeight() const;
     };
     
+
+
+
 
     //class BoundingBox
     //{

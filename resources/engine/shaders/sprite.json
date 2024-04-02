@@ -3,13 +3,20 @@
   "frag": "sprite",
 
   "uniforms": [
-
     {
-      "name": "vertexTransform",
+      "name": "texCoordsTransform",
       "type": "mat3"
     },
     {
-      "name": "texCoordsTransform",
+      "name": "spriteMatrix",
+      "type": "mat3"
+    },
+    {
+      "name": "viewMatrix",
+      "type": "mat3"
+    },
+    {
+      "name": "projectionMatrix",
       "type": "mat3"
     },
     {

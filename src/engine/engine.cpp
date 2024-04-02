@@ -136,6 +136,6 @@ namespace Engine
 	}
 	void RuntimeEngine::setRenderPipeline(std::shared_ptr<Graphics::RenderPipeline> pipeline)
 	{
-		m_renderPipeline = pipeline;	
+		m_renderPipeline = pipeline;
 	}
 }

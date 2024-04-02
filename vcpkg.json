@@ -4,6 +4,7 @@
     "sdl2-image",
     "gamenetworkingsockets",
     "glew",
-    "rapidjson"
+    "rapidjson",
+    "rttr"
   ]
 }

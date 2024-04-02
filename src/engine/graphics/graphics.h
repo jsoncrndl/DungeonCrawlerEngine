@@ -33,13 +33,15 @@ namespace Engine::Graphics
 
 		std::shared_ptr<Shader> m_blitShader;
 		std::shared_ptr<Shader> m_defaultSpriteShader;
-
-		GLuint vertices;
-		GLuint texCoords;
-		GLuint indices;
+		std::shared_ptr<Shader> m_partialCopyShader;
 
 		std::shared_ptr<Quad> quad;
 		std::shared_ptr<RenderTexture> m_currentTarget;
+
+		Matrix3x3 m_viewMatrix = Matrix3x3::identity;
+		Matrix3x3 m_projectionMatrix = Matrix3x3::identity;
+
+		uint16_t m_pixelsPerUnit;
 
 		// Load a texture from an image
 		void loadTexture(std::shared_ptr<Texture> texture, std::string path, uint32_t textureObject);
@@ -61,11 +63,15 @@ namespace Engine::Graphics
 		void setRenderTarget(std::shared_ptr<RenderTexture> target);
 
 		// Draw a sprite to the current render target
-		void drawSprite(const Sprite& texture, const Vector2& position, const Vector2& scale, const std::shared_ptr<Material>& material);
+		void drawSprite(const Sprite& texture, const Vector2& position, const Vector2& scale, const float& rotation, const std::shared_ptr<Material>& material);
 
-		void drawTexture(const std::shared_ptr<Texture> texture, const Rect& src, const Rect& dst, const std::shared_ptr<Material>& material);
+		void drawTexture(const std::shared_ptr<Texture> texture, const Rect& src, const Rect& dst);
 
 		void blit(std::shared_ptr<Texture> texture);
+		
+		void setViewMatrix(Matrix3x3 matrix);
+		void setProjectionMatrix(Matrix3x3 matrix);
+		void setPixelsPerUnit(uint16_t pixelsPerUnit);
 
 		// Perform any post content loading setup such as loading engine shaders
 		void postLoad();

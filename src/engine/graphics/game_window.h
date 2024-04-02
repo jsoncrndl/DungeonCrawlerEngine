@@ -63,7 +63,8 @@ namespace Engine {
 			void setPosition(int x, int y);
 			void setFullscreen(bool fullscreen);
 			void close();
-			
+			void setTitle(std::string title);
+
 			// Returns the rect of the window viewport
 			Rect getRect() const;
 

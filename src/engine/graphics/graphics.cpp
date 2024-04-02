@@ -1,6 +1,7 @@
 #include <iostream>
 #include <SDL_image.h>
 #include "graphics.h"
+#include <cmath>
 #include "../engine.h"
 
 namespace Engine::Graphics
@@ -58,7 +59,7 @@ namespace Engine::Graphics
 		updateViewport();
 	}
 
-	void Graphics::drawSprite(const Sprite& sprite, const Vector2& position, const Vector2& scale, const std::shared_ptr<Material>& material)
+	void Graphics::drawSprite(const Sprite& sprite, const Vector2& position, const Vector2& scale, const float& rotation, const std::shared_ptr<Material>& material)
 	{
 		std::shared_ptr<Shader> shader;
 
@@ -75,7 +76,6 @@ namespace Engine::Graphics
 		glUseProgram(shader->programID);
 
 		Rect renderTargetRect{ 0, 0, 0, 0 };
-
 		if (m_currentTarget == nullptr)
 		{
 			renderTargetRect = m_window->getRect();
@@ -85,24 +85,51 @@ namespace Engine::Graphics
 			renderTargetRect = m_currentTarget->getRect();
 		}
 
-		float vertexTransform[] = {
-			scale.x * sprite.getRect().getWidth() / renderTargetRect.getWidth(), 0, 0,
-			0, scale.y * sprite.getRect().getHeight() / renderTargetRect.getHeight(), 0,
+		// Divide by 2 to scale the quads down so they are only 1 unit big (-0.5 to 0.5)
+		Matrix3x3 scaleMatrix({
+			scale.x / 2.0f, 0, 0,
+			0, scale.y / 2.0f, 0,
+			0, 0, 1
+		});
+
+		Matrix3x3 rotationMatrix({
+			std::cos(rotation), std::sin(rotation), 0,
+			-std::sin(rotation), std::cos(rotation), 0,
+			0, 0, 1
+		});
+
+		Matrix3x3 translationMatrix({
+			1, 0, 0,
+			0, 1, 0,
 			position.x, position.y, 1
-		};
+		});
+
+		Matrix3x3 spriteMatrix = scaleMatrix * rotationMatrix * translationMatrix;
 
 		float texCoordsTransform[] = {
 			static_cast<float>(sprite.getRect().getWidth()) / static_cast<float>(sprite.getTexture()->getWidth()), 0, 0,
 			0, static_cast<float>(sprite.getRect().getHeight()) / static_cast<float>(sprite.getTexture()->getHeight()), 0,
-			sprite.getRect().getX() / sprite.getTexture()->getWidth(), sprite.getRect().getY() / sprite.getTexture()->getHeight(), 1
+			static_cast<float>(sprite.getRect().getX()) / static_cast<float>(sprite.getTexture()->getWidth()), static_cast<float>(sprite.getRect().getY()) / static_cast<float>(sprite.getTexture()->getHeight()), 1
 		};
 
 		// Set global uniforms
-		
-		std::optional<Uniform> uniform = shader->getUniform("vertexTransform");
+
+		std::optional<Uniform> uniform = shader->getUniform("spriteMatrix");
 		if (uniform.has_value())
 		{
-			glUniformMatrix3fv(uniform->location, 1, GL_FALSE, vertexTransform);
+			glUniformMatrix3fv(uniform->location, 1, GL_FALSE, spriteMatrix.getData());
+		}
+
+		uniform = shader->getUniform("viewMatrix");
+		if (uniform.has_value())
+		{
+			glUniformMatrix3fv(uniform->location, 1, GL_FALSE, m_viewMatrix.getData());
+		}
+
+		uniform = shader->getUniform("projectionMatrix");
+		if (uniform.has_value())
+		{
+			glUniformMatrix3fv(uniform->location, 1, GL_FALSE, m_projectionMatrix.getData());
 		}
 
 		uniform = shader->getUniform("texCoordsTransform");
@@ -129,20 +156,9 @@ namespace Engine::Graphics
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, nullptr);
 	}
 
-	void Graphics::drawTexture(std::shared_ptr<Texture> texture, const Rect& src, const Rect& dst, const std::shared_ptr<Material>& material)
+	void Graphics::drawTexture(std::shared_ptr<Texture> texture, const Rect& src, const Rect& dst)
 	{
-		std::shared_ptr<Shader> shader;
-		
-
-
-		if (material == nullptr)
-		{
-			shader = m_defaultSpriteShader;
-		}
-		else
-		{
-			shader = material->getShader();
-		}
+		std::shared_ptr<Shader> shader = m_partialCopyShader;
 
 		glBindVertexArray(quad->vao);
 
@@ -151,8 +167,8 @@ namespace Engine::Graphics
 
 		glUseProgram(shader->programID);
 
-		Rect renderTargetRect { 0, 0, 0, 0 };
-
+		Rect renderTargetRect{ 0, 0, 0, 0 };
+		
 		if (m_currentTarget == nullptr)
 		{
 			renderTargetRect = m_window->getRect();
@@ -162,30 +178,35 @@ namespace Engine::Graphics
 			renderTargetRect = m_currentTarget->getRect();
 		}
 
+		float normalizedWidth = static_cast<float>(dst.getWidth()) / renderTargetRect.getWidth();
+		float normalizedHeight = static_cast<float>(dst.getHeight()) / renderTargetRect.getHeight();
+
+
+		// TODO: This currently always centers the image for simplicity. It needs to be able to move the quad to cover any rect in pixel coordinates
 		float vertexTransform[] = {
-			static_cast<float>(dst.getWidth()) / static_cast<float>(renderTargetRect.getWidth()), 0, 0,
-			0, static_cast<float>(dst.getHeight()) / static_cast<float>(renderTargetRect.getHeight()), 0,
-			dst.getX() / renderTargetRect.getWidth(), dst.getY() / renderTargetRect.getHeight(), 1
+			normalizedWidth, 0, 0,
+			0, normalizedHeight, 0,
+			0, 0, 1
 		};
 
 		float texCoordsTransform[] = {
 			static_cast<float>(src.getWidth()) / static_cast<float>(texture->getWidth()), 0, 0,
 			0, static_cast<float>(src.getHeight()) / static_cast<float>(texture->getHeight()), 0,
-			src.getX() / renderTargetRect.getWidth(), src.getY() / texture->getHeight(), 1
+			static_cast<float>(src.getX()) / static_cast<float>(texture->getWidth()), static_cast<float>(src.getY()) / static_cast<float>(texture->getHeight()), 1
 		};
 
 		// Set global uniforms
 
-		std::optional<Uniform> uniform = shader->getUniform("vertexTransform");
-		if (uniform.has_value())
-		{
-			glUniformMatrix3fv(uniform->location, 1, GL_FALSE, vertexTransform);
-		}
-
-		uniform = shader->getUniform("texCoordsTransform");
+		std::optional<Uniform> uniform = shader->getUniform("texCoordsTransform");
 		if (uniform.has_value())
 		{
 			glUniformMatrix3fv(uniform->location, 1, GL_FALSE, texCoordsTransform);
+		}
+
+		uniform = shader->getUniform("vertexTransform");
+		if (uniform.has_value())
+		{
+			glUniformMatrix3fv(uniform->location, 1, GL_FALSE, vertexTransform);
 		}
 
 		uniform = shader->getUniform("mainTexture");
@@ -194,18 +215,8 @@ namespace Engine::Graphics
 			glUniform1i(uniform->location, 0);
 		}
 
-		// Bind texture to TEXTURE0
-
-		if (material != nullptr)
-		{
-			// Set material property uniforms
-		}
-
-		// for each material property in material, set uniform to value
-
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, quad->indices);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, nullptr);
-
 	}
 
 	void Graphics::blit(std::shared_ptr<Texture> texture)
@@ -236,7 +247,23 @@ namespace Engine::Graphics
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, quad->indices);
 
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, 0);
-		
+
+	}
+
+	void Graphics::setViewMatrix(Matrix3x3 matrix)
+	{
+		m_viewMatrix = matrix;
+		// Eventually make a uniform buffer object so the uniform can update occasionally instead of every draw call
+	}
+
+	void Graphics::setProjectionMatrix(Matrix3x3 matrix)
+	{
+		m_projectionMatrix = matrix;
+	}
+
+	void Graphics::setPixelsPerUnit(uint16_t pixelsPerUnit)
+	{
+		m_pixelsPerUnit = pixelsPerUnit;
 	}
 
 	void Graphics::clear()
@@ -249,6 +276,7 @@ namespace Engine::Graphics
 		auto assetManager = RuntimeEngine::getInstance()->getAssetManager();
 		m_blitShader = assetManager->getShader(Resources::ResourceLocation("engine", "blit"));
 		m_defaultSpriteShader = assetManager->getShader(Resources::ResourceLocation("engine", "sprite"));
+		m_partialCopyShader = assetManager->getShader(Resources::ResourceLocation("engine", "partialCopy"));
 	}
 
 	void Graphics::clear(float r, float g, float b)
@@ -350,7 +378,7 @@ namespace Engine::Graphics
 		const int vertexLength = static_cast<int>(shader->vertSource.length());
 		glShaderSource(shader->vertexID, 1, &vertexSource, &vertexLength);
 		glCompileShader(shader->vertexID);
-		
+
 		GLint isCompiled = 0;
 		glGetShaderiv(shader->vertexID, GL_COMPILE_STATUS, &isCompiled);
 		if (isCompiled == GL_FALSE)
@@ -435,7 +463,6 @@ namespace Engine::Graphics
 
 	Graphics::Graphics(std::shared_ptr<GameWindow> window) :
 		m_window(window)
-		//m_renderer(SDL_CreateRenderer(m_window->m_window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_TARGETTEXTURE))
 	{
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
