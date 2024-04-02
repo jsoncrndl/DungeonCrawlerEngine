@@ -13,15 +13,15 @@ int SDL_main(int argc, char* argv[])
         return -1;
     }
 
-    //Engine::RuntimeEngine::create()->start();
+    Engine::RuntimeEngine::create()->start();
    
-    std::shared_ptr<Engine::ECS::ComponentPool<Engine::ECS::Transform>> pool = Engine::ECS::ComponentPool<Engine::ECS::Transform>::create(100);
+    //std::shared_ptr<Engine::ECS::ComponentPool<Engine::ECS::Transform>> pool = Engine::ECS::ComponentPool<Engine::ECS::Transform>::create(100);
 
-    int i = 0;
-    while (pool->getComponent() != nullptr)
-    {
-        std::cout << i++ << "\n";
-    }
+    //int i = 0;
+    //while (pool->getComponent() != nullptr)
+    //{
+    //    std::cout << i++ << "\n";
+    //}
 
     // Quit SDL
     SDL_Quit();
