@@ -1,9 +1,9 @@
 #pragma once
 
 #include "component.h"
-#include "../../math/math_types.h"
+#include "../../../math/math_types.h"
 
-namespace Engine::ECS
+namespace Engine::Game::ECS
 {
 	class Transform : public Component
 	{
@@ -29,7 +29,7 @@ namespace Engine::ECS
 		Transform* getParent() const;
 		void setParent(Transform* parent);
 
-		Vector2 getLocalScale();
+		Vector2 getLocalScale() const;
 		void setLocalScale(const Vector2& scale);
 
 		void reset() override;

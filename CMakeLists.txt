@@ -31,14 +31,32 @@ set(SOURCE_FILES
     src/engine/graphics/material.cpp
     src/engine/graphics/shader.cpp
 
+    # Game
+    src/engine/game/game.cpp
+    src/engine/game/level/level.cpp
+    src/engine/game/states/game_state.cpp
+    src/engine/game/states/gs_loading.cpp
+    src/engine/game/states/gs_level.cpp
+    src/engine/game/free_resource_visitor.cpp
+    src/engine/game/reset_object_visitor.cpp
+    src/engine/game/pooled_object.cpp
+    src/engine/game/object_pool.cpp
+    src/engine/game/pooled_object_visitor.cpp
+
+    # ECS
+    src/engine/game/memory_pool.cpp
+
+    # Entites
+    src/engine/game/ecs/entities/entity.cpp
+
     # Components
-    src/engine/ecs/components/component.cpp
-    src/engine/ecs/components/component_registry.cpp
-    src/engine/ecs/components/component_visitor.cpp
-    src/engine/ecs/components/find_deleted_component_visitor.cpp
+    src/engine/game/ecs/components/component.cpp
+    src/engine/game/ecs/components/component_registry.cpp
 
+    src/engine/game/ecs/components/transform.cpp
 
-    src/engine/ecs/components/transform.cpp
+    # Systems
+    src/engine/game/ecs/systems/system.cpp
 )
 
 set(HEADER_FILES 
@@ -68,18 +86,46 @@ set(HEADER_FILES
     src/engine/graphics/material.h
     src/engine/graphics/shader.h
 
-    # Components
-    src/engine/ecs/components/component.h
-    src/engine/ecs/components/component_registry.h
-    src/engine/ecs/components/component_pool.h
-    src/engine/ecs/components/component_visitor.h
-    src/engine/ecs/components/find_deleted_component_visitor.h
+    # Game
+    src/engine/game/game.h
+    src/engine/game/level/level.h
+    src/engine/game/states/game_state.h
+    src/engine/game/states/gs_loading.h
+    src/engine/game/states/gs_level.h
+    src/engine/game/pooled_object.h
+    src/engine/game/object_pool.h
+    src/engine/game/reset_object_visitor.h
+    src/engine/game/free_resource_visitor.h
+    src/engine/game/pooled_object_visitor.h
 
-    src/engine/ecs/components/transform.h
+    # ECS
+    src/engine/game/memory_pool.h
+
+    # Entities
+    src/engine/game/ecs/entities/entity.h
+
+    # Components
+    src/engine/game/ecs/components/component.h
+    src/engine/game/ecs/components/component_registry.h
+    src/engine/game/ecs/components/transform.h
+
+    # Systems
+    src/engine/game/ecs/systems/system.h
 )
 
 source_group(TREE "${CMAKE_SOURCE_DIR}/src" PREFIX "Source Files" FILES ${SOURCE_FILES})
 source_group(TREE "${CMAKE_SOURCE_DIR}/src" PREFIX "Header Files" FILES ${HEADER_FILES})
+
+# include(FetchContent)
+
+# FetchContent_Declare(
+#   luau
+#   GIT_REPOSITORY https://github.com/luau-lang/luau.git
+#   GIT_TAG        47ad768c69ca1995fa9c2fb3b18fab6d0f02527b # 0.619
+# )
+
+# FetchContent_MakeAvailable(luau)
+
 
 # Include packages
 
@@ -120,6 +166,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE GLEW::GLEW)
 target_link_libraries(${PROJECT_NAME} PRIVATE SDL2_image::SDL2_image)
 target_link_libraries(${PROJECT_NAME} PRIVATE rapidjson)
 target_link_libraries(${PROJECT_NAME} PRIVATE RTTR::Core)
+# target_link_libraries(${PROJECT_NAME} PRIVATE luau)
 
 # Copy resources on build
 add_custom_command(

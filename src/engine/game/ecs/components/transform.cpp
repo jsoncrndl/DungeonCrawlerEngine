@@ -1,6 +1,6 @@
 #include "transform.h"
 
-namespace Engine::ECS
+namespace Engine::Game::ECS
 {
 	Vector2 Transform::getWorldPosition() const
 	{
@@ -100,7 +100,7 @@ namespace Engine::ECS
 			setWorldRotation(previousRotation);
 		}
 	}
-	Vector2 Transform::getLocalScale()
+	Vector2 Transform::getLocalScale() const
 	{
 		return m_localScale;
 	}
