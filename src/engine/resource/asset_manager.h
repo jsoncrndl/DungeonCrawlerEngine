@@ -23,7 +23,8 @@ namespace Engine::Resources
 
 	public:
 		
-		void AddProject(std::string projectName);
+		void LoadProject(std::string projectName);
+		void UnloadProject(std::string projectName);
 		void LoadResources();
 
 		const std::vector<std::shared_ptr<ShaderRegistry>> getShaders();

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../pooled_object.h"
+#include "../../memory/pooled_object.h"
 
 namespace Engine::Game::ECS
 {

@@ -23,19 +23,30 @@ namespace Engine::Game
 
 	MemoryPool::MemoryPool(MemoryPool* parent) : m_parent(parent), m_size(0), m_memory(nullptr), m_freeMemory(nullptr)
 	{
+		parent->children.push_back(this);
 	}
 
+	MemoryPool::MemoryPool() : m_parent(nullptr), m_size(0), m_memory(nullptr), m_freeMemory(nullptr)
+	{
+	}
+
+	/// <summary>
+	/// Clean up memory pool when done. This should only be called on the parent pool
+	/// </summary>
 	void MemoryPool::free()
 	{
-		if (m_parent != nullptr)
+		if (m_parent == nullptr)
 		{
-			delete m_memory;
+			std::free(m_memory);
 			m_memory = nullptr;
 			m_freeMemory = nullptr;
 		}
 		else
 		{
-			// Do nothing for now since memory can't be returned
+			for (MemoryPool* pool : children)
+			{
+				pool->free();
+			}
 		}
 	}
 
@@ -49,7 +60,7 @@ namespace Engine::Game
 		else
 		{
 			data = m_freeMemory;
-			m_freeMemory = reinterpret_cast<void*>(static_cast<uint8_t*>(m_freeMemory) + bytes);
+			m_freeMemory = static_cast<void*>(static_cast<uint8_t*>(m_freeMemory) + bytes);
 		}
 
 		return data;

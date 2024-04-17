@@ -3,10 +3,11 @@
 #include <vector>
 #include "../components/component.h"
 #include "../components/transform.h"
+#include "../../serializable.h"
 
 namespace Engine::Game::ECS
 {
-	class Entity : public PooledObject
+	class Entity : public PooledObject, public Serializable
 	{
 		std::string m_name;
 		std::vector<Component*> m_components;
@@ -19,6 +20,9 @@ namespace Engine::Game::ECS
 	public:
 		Component* addComponent(Component* component);
 		bool removeComponent(Component* component);
+
+		void setName(std::string name);
+		std::string getName();
 
 		template <typename T>
 		T* getComponent();

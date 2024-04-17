@@ -19,6 +19,16 @@ namespace Engine::Game::ECS
 		return false;
 	}
 
+	void Entity::setName(std::string name)
+	{
+		m_name = name;
+	}
+
+	std::string Entity::getName()
+	{
+		return m_name;
+	}
+
 	Component* Entity::addComponent(Component* component)
 	{
 		return nullptr;

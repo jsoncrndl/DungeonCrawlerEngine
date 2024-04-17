@@ -27,6 +27,8 @@ namespace Engine::Game
 		ObjectPool(T* location, uint16_t size);
 
 		T* getObject();
+
+		void cleanUp();
 	};
 
 	template <typename T>
@@ -36,7 +38,7 @@ namespace Engine::Game
 		FreeResourceVisitor visitor;
 		for (int32_t i = 0; i < m_size; ++i)
 		{
-			PooledObject* object = static_cast<T>(m_objects) + i;
+			PooledObject* object = static_cast<T*>(m_objects) + i;
 
 			object->accept(&visitor);
 			if (visitor.getResult() != nullptr)
@@ -46,6 +48,18 @@ namespace Engine::Game
 		}
 
 		return nullptr;
+	}
+
+	template<typename T>
+	requires std::derived_from<T, PooledObject>
+	inline void ObjectPool<T>::cleanUp()
+	{
+		for (uint16_t i = 0; i < m_size; ++i)
+		{
+			static_cast<T*>(m_objects)[m_size].~T();
+		}
+		m_size = 0;
+		m_objects = nullptr;
 	}
 
 	template<typename T>

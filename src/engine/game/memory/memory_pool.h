@@ -1,6 +1,8 @@
 #pragma once
 #include <cstdint>
 #include <iostream>
+#include <bit>
+#include <vector>
 
 namespace Engine::Game
 {
@@ -14,15 +16,16 @@ namespace Engine::Game
 		void* m_memory;
 		void* m_freeMemory;
 		uint16_t m_size;
+		std::vector<MemoryPool*> children;
+		void* allocateRaw(uint16_t size);
 
 	public:
 		MemoryPool(MemoryPool* parent);
+		MemoryPool();
 
 		void reserve(uint16_t bytes);
 		
 		void free();
-
-		void* allocateRaw(uint16_t size);
 
 		template <typename T>
 		T* allocate(uint16_t size);
@@ -33,8 +36,8 @@ namespace Engine::Game
 	{
 		// Calculate any padding needed before placing the data
 
-		auto padding = alignof(T) - reinterpret_cast<uintptr_t>(m_freeMemory) % alignof(T);
-		void* allocateStart = reinterpret_cast<void*>(static_cast<uint8_t*>(m_freeMemory) + padding);
+		auto padding = alignof(T) - std::bit_cast<uintptr_t>(m_freeMemory) % alignof(T);
+		void* allocateStart = static_cast<void*>(static_cast<uint8_t*>(m_freeMemory) + padding);
 
 		T* data;
 		if (static_cast<T*>(allocateStart) + elements >= static_cast<T*>(m_memory) + m_size)
@@ -49,4 +52,6 @@ namespace Engine::Game
 
 		return data;
 	}
+
+	
 }

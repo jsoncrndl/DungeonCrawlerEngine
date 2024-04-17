@@ -34,17 +34,20 @@ set(SOURCE_FILES
     # Game
     src/engine/game/game.cpp
     src/engine/game/level/level.cpp
+    src/engine/game/level/level_deserializer.cpp
     src/engine/game/states/game_state.cpp
     src/engine/game/states/gs_loading.cpp
     src/engine/game/states/gs_level.cpp
-    src/engine/game/free_resource_visitor.cpp
-    src/engine/game/reset_object_visitor.cpp
-    src/engine/game/pooled_object.cpp
-    src/engine/game/object_pool.cpp
-    src/engine/game/pooled_object_visitor.cpp
+
+    src/engine/game/memory/free_resource_visitor.cpp
+    src/engine/game/memory/reset_object_visitor.cpp
+    src/engine/game/memory/pooled_object.cpp
+    src/engine/game/memory/object_pool.cpp
+    src/engine/game/memory/pooled_object_visitor.cpp
+    src/engine/game/memory/memory_pool.cpp
+    src/engine/game/serializable.cpp
 
     # ECS
-    src/engine/game/memory_pool.cpp
 
     # Entites
     src/engine/game/ecs/entities/entity.cpp
@@ -63,6 +66,16 @@ set(HEADER_FILES
     src/engine/engine.h
     src/engine/sdl_event_dispatcher.h
     src/engine/math/math_types.h
+
+    # Memory
+    src/engine/memory/fallback_allocator.h
+    src/engine/memory/stack_allocator.h
+    src/engine/memory/null_allocator.h
+    src/engine/memory/pool_allocator.h
+    src/engine/memory/segregator.h
+    src/engine/memory/byte_literals.h
+    src/engine/memory/engine_memory.h
+
 
     # Resources
     src/engine/resource/fileio.h
@@ -89,17 +102,21 @@ set(HEADER_FILES
     # Game
     src/engine/game/game.h
     src/engine/game/level/level.h
+    src/engine/game/level/level_deserializer.h
     src/engine/game/states/game_state.h
     src/engine/game/states/gs_loading.h
     src/engine/game/states/gs_level.h
-    src/engine/game/pooled_object.h
-    src/engine/game/object_pool.h
-    src/engine/game/reset_object_visitor.h
-    src/engine/game/free_resource_visitor.h
-    src/engine/game/pooled_object_visitor.h
-
+    src/engine/game/memory/pooled_object.h
+    src/engine/game/memory/object_pool.h
+    src/engine/game/memory/reset_object_visitor.h
+    src/engine/game/memory/free_resource_visitor.h
+    src/engine/game/memory/pooled_object_visitor.h
+    src/engine/game/memory/memory_pool.h
+    src/engine/game/memory/pool_array.h
+    
+    src/engine/game/serializable.h
+    
     # ECS
-    src/engine/game/memory_pool.h
 
     # Entities
     src/engine/game/ecs/entities/entity.h
@@ -129,6 +146,7 @@ source_group(TREE "${CMAKE_SOURCE_DIR}/src" PREFIX "Header Files" FILES ${HEADER
 
 # Include packages
 
+find_package(crossguid CONFIG REQUIRED)
 find_package(GameNetworkingSockets REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(RapidJSON CONFIG REQUIRED)
@@ -166,6 +184,8 @@ target_link_libraries(${PROJECT_NAME} PRIVATE GLEW::GLEW)
 target_link_libraries(${PROJECT_NAME} PRIVATE SDL2_image::SDL2_image)
 target_link_libraries(${PROJECT_NAME} PRIVATE rapidjson)
 target_link_libraries(${PROJECT_NAME} PRIVATE RTTR::Core)
+target_link_libraries(${PROJECT_NAME} PRIVATE crossguid)
+
 # target_link_libraries(${PROJECT_NAME} PRIVATE luau)
 
 # Copy resources on build

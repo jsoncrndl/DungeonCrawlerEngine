@@ -7,4 +7,7 @@ namespace Engine::Game
 	{
 		visitor->visit(this);
 	}
+	PooledObject::~PooledObject()
+	{
+	}
 }

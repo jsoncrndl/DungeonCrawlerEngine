@@ -2,34 +2,41 @@
 #include <array>
 #include "states/game_state.h"
 #include "level/level.h"
+#include "memory/pool_array.h"
 
+
+namespace Engine {
+	class RuntimeEngine;
+}
 
 namespace Engine::Game
 {
+	
+
 	class Game
 	{
 	private:
 		MemoryPool m_memory;
 		
-		GameState* m_states;
-		static const uint8_t numStates = 0;
+		std::unordered_map<GameStateType, GameState*> m_states;
+		PoolArray<Level> m_levels;
 
-		Level* m_levels;
-		static const uint8_t numLevels = 4;
-
-
+		GameState* m_currentState;
+		GameStateType m_nextState;
+		RuntimeEngine* engine;
 
 		void initializeStates();
-
-
-	public:
-		Game();
 		GameState* getState(GameStateType state);
 
+	public:
+		Game(Engine::RuntimeEngine* engine);
 
-		// Root memory pool
-		// Game states
-		// List of levels
+		void load();
+		void update(float deltaSeconds);
+		void render(std::shared_ptr<Graphics::Graphics> graphics);
+
+		void quit();
+
 		// NetworkManager
 		// Assets and resources
 	};

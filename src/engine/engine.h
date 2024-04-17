@@ -8,12 +8,14 @@
 #include "sdl_event_dispatcher.h"
 #include "resource/registry.h"
 #include "resource/asset_manager.h"
+#include "game/game.h"
 
 namespace Engine
 {
 	class RuntimeEngine
 	{
 	private:
+		const size_t MAX_MEMORY;
 
 		std::shared_ptr<EventDispatcher> m_eventDispatcher;
 		std::shared_ptr<Graphics::GameWindow> m_window;
@@ -22,6 +24,8 @@ namespace Engine
 
 		std::shared_ptr<Resources::AssetManager> m_assetManager;
 
+		Game::Game* m_game;
+
 		static std::shared_ptr<RuntimeEngine> instance;
 
 		bool m_shouldQuit = false;
@@ -29,24 +33,25 @@ namespace Engine
 
 		void mainLoop();
 		void initGraphics();
-
+		void allocateMemory();
 		void initialize();
-
 		void loadContent();
 		void handleInput();
 		void update(float deltaTime);
 		void render();
-		RuntimeEngine();
-
-
+		RuntimeEngine(size_t maxMemory);
 
 	public:
 		void start();
-		static std::shared_ptr<RuntimeEngine> create();
+		static std::shared_ptr<RuntimeEngine> create(uint64_t reservedMemory);
 		static std::shared_ptr<RuntimeEngine> getInstance();
 
 		std::shared_ptr<Graphics::GameWindow> getWindow();
 		std::shared_ptr<Resources::AssetManager> getAssetManager();
+		
+		void loadGame(std::string path);
+		void closeGame();
+
 		void quit();
 		void setRenderPipeline(std::shared_ptr<Graphics::RenderPipeline> pipeline);
 	};

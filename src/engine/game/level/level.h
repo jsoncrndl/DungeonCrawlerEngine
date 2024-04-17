@@ -3,20 +3,21 @@
 #include <unordered_map>
 #include <string>
 #include <iostream>
-#include "../object_pool.h"
-#include "../memory_pool.h"
-#include "../pooled_object.h"
+#include "../memory/object_pool.h"
+#include "../memory/memory_pool.h"
+#include "../memory/pooled_object.h"
 #include "../ecs/components/transform.h"
 #include "../ecs/entities/entity.h"
+#include "../../graphics/graphics.h"
 
 namespace Engine::Game
 {
 	class Game;
 	class Level : public PooledObject
 	{
-		/*friend class LevelSerializer;
+		//friend class LevelSerializer;
 		friend class LevelDeserializer;
-		*/
+		
 		std::unordered_map<rttr::type, ObjectPoolBase*> m_componentPools;
 		ObjectPool<ECS::Entity>* m_entityPool;
 		MemoryPool m_memory;
@@ -29,20 +30,20 @@ namespace Engine::Game
 		template <typename T>
 		requires std::derived_from<T, ECS::Component>
 		void allocateComponent(uint16_t maxAmount);
-
 		void allocateEntities(uint16_t maxAmount);
+		ObjectPoolBase* getComponentPool(std::string type);
 
 	public:
 		Level(Game* game, MemoryPool memory);
 
 		void postLoad();
-		void update();
-		void render();
+		void update(float deltaSeconds);
+		void render(std::shared_ptr<Graphics::Graphics> graphics);
 
 		template <typename T>
 		requires std::derived_from<T, ECS::Component>
 		ObjectPool<T>* getComponentPool();
-
+		
 		ObjectPool<ECS::Entity>* getEntityPool();
 
 		Game* getGame();

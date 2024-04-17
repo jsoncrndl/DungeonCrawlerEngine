@@ -1,5 +1,7 @@
 #pragma once
 
+#include <crossguid/guid.hpp>
+
 namespace Engine::Game
 {
     class FreeResourceVisitor;
@@ -12,10 +14,11 @@ namespace Engine::Game
         friend class ResetObjectVisitor;
 
         bool m_isFree;
-
+        
         virtual void reset() = 0;
 
     public:
         virtual void accept(PooledObjectVisitor* visitor);
+        virtual ~PooledObject();
     };
 }

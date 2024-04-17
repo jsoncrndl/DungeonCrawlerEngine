@@ -3,7 +3,7 @@
 
 namespace Engine::Resources
 {
-	void AssetManager::AddProject(std::string name)
+	void AssetManager::LoadProject(std::string name)
 	{
 		if (m_shaders.count(name) > 0)
 		{

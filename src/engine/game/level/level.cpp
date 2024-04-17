@@ -22,11 +22,11 @@ namespace Engine::Game
     {
     }
 
-    void Level::update()
+    void Level::update(float deltaSeconds)
     {
     }
 
-    void Level::render()
+    void Level::render(std::shared_ptr<Graphics::Graphics> graphics)
     {
         
     }
@@ -37,6 +37,18 @@ namespace Engine::Game
 
         allocateEntities(500);
         allocateComponent<ECS::Transform>(100);
+    }
+
+    ObjectPoolBase* Level::getComponentPool(std::string type)
+    {
+        rttr::type poolType = rttr::type::get_by_name(type);
+
+        if (m_componentPools.count(poolType) == 0)
+        {
+            return nullptr;
+        }
+
+        return m_componentPools[poolType];
     }
 
     ObjectPool<ECS::Entity>* Level::getEntityPool()

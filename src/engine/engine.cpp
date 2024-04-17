@@ -28,14 +28,15 @@ namespace Engine
 		}
 	}
 
-	RuntimeEngine::RuntimeEngine()
+	RuntimeEngine::RuntimeEngine(size_t maxMemory) : m_game(nullptr), MAX_MEMORY(maxMemory)
 	{
 	}
 
 	void RuntimeEngine::initialize()
 	{
-		initGraphics();
 
+
+		initGraphics();
 		m_eventDispatcher = std::make_shared<EventDispatcher>(m_window);
 	}
 
@@ -66,10 +67,20 @@ namespace Engine
 		m_renderPipeline->initialize(m_graphics);
 	}
 
+	void RuntimeEngine::allocateMemory()
+	{
+		void* memory = std::malloc(MAX_MEMORY);
+		if (memory == nullptr)
+		{
+			SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Initialization Error!", "Failed to allocate memory for engine.", nullptr);
+		}
+		std::cout << memory;
+	}
+
 	void RuntimeEngine::loadContent()
 	{
 		m_assetManager = std::make_shared<Resources::AssetManager>();
-		m_assetManager->AddProject("engine");
+		m_assetManager->LoadProject("engine");
 		m_assetManager->LoadResources();
 	}
 
@@ -82,7 +93,7 @@ namespace Engine
 	{
 		if (deltaTime != 0) 
 		{
-
+			
 		}
 	}
 
@@ -97,12 +108,13 @@ namespace Engine
 		{
 			std::cout << "Engine is already started!\n";
 		}
+		allocateMemory();
 		loadContent();
 		initialize();
 		mainLoop();
 	}
 
-	std::shared_ptr<RuntimeEngine> RuntimeEngine::create()
+	std::shared_ptr<RuntimeEngine> RuntimeEngine::create(uint64_t maxMemory)
 	{
 		if (instance.get() != nullptr)
 		{
@@ -110,7 +122,7 @@ namespace Engine
 			return instance;
 		}
 
-		instance = std::shared_ptr<RuntimeEngine>(new RuntimeEngine());
+		instance = std::shared_ptr<RuntimeEngine>(new RuntimeEngine(maxMemory));
 
 		return instance;
 	}
@@ -128,6 +140,22 @@ namespace Engine
 	std::shared_ptr<Resources::AssetManager> RuntimeEngine::getAssetManager()
 	{
 		return m_assetManager;
+	}
+
+	void RuntimeEngine::loadGame(std::string path)
+	{
+		if (m_game != nullptr)
+		{
+			closeGame();
+		}
+
+		m_game = new Game::Game(this);
+	}
+
+	void RuntimeEngine::closeGame()
+	{
+		m_game->quit();
+		delete m_game;
 	}
 
 	void RuntimeEngine::quit()
