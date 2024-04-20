@@ -24,13 +24,4 @@ namespace Engine::Memory
     {
         return ptr == other;
     }
-
-
-    template <typename T>
-    concept AllocatorType = requires(T allocator, size_t size, Block block, bool owns, char* name) {
-        block = allocator.allocate(size, size);
-        allocator.deallocate(block);
-        owns = allocator.owns(block);
-        name = allocator.getName();
-    };
 }

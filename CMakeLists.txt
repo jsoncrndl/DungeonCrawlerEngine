@@ -12,10 +12,7 @@ set(SOURCE_FILES
     src/engine/math/math_types.cpp
 
     # Memory
-    src/engine/memory/null_allocator.cpp
-    src/engine/memory/free_list.cpp
     src/engine/memory/stack_allocator.cpp
-    src/engine/memory/memory_utils.cpp
 
     # Resources
     src/engine/resource/registry.cpp
@@ -74,16 +71,9 @@ set(HEADER_FILES
     src/engine/math/math_types.h
 
     # Memory
-    src/engine/memory/fallback_allocator.h
     src/engine/memory/stack_allocator.h
-    src/engine/memory/null_allocator.h
-    src/engine/memory/pool_allocator.h
-    src/engine/memory/segregator.h
     src/engine/memory/byte_literals.h
-    src/engine/memory/engine_memory.h
     src/engine/memory/memory_types.h
-    src/engine/memory/free_list.h
-    src/engine/memory/memory_utils.h
 
     # Resources
     src/engine/resource/fileio.h
