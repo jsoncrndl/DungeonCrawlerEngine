@@ -14,19 +14,31 @@ namespace Engine
 {
 	class RuntimeEngine
 	{
+		using EngineAllocator = Memory::StackAllocator;
+
+
+		class Factory
+		{
+			static RuntimeEngine* create();
+		};
+
+
 	private:
+		EngineAllocator allocator;
+
+
 		const size_t MAX_MEMORY;
 
-		std::shared_ptr<EventDispatcher> m_eventDispatcher;
-		std::shared_ptr<Graphics::GameWindow> m_window;
-		std::shared_ptr<Graphics::Graphics> m_graphics;
-		std::shared_ptr<Graphics::RenderPipeline> m_renderPipeline;
+		EventDispatcher* m_eventDispatcher;
+		Graphics::GameWindow* m_window;
+		Graphics::Graphics* m_graphics;
+		Graphics::RenderPipeline* m_renderPipeline;
 
-		std::shared_ptr<Resources::AssetManager> m_assetManager;
+		Resources::AssetManager* m_assetManager;
 
 		Game::Game* m_game;
 
-		static std::shared_ptr<RuntimeEngine> instance;
+		static RuntimeEngine* instance;
 
 		bool m_shouldQuit = false;
 		bool m_isStarted = false;
@@ -43,16 +55,16 @@ namespace Engine
 
 	public:
 		void start();
-		static std::shared_ptr<RuntimeEngine> create(uint64_t reservedMemory);
-		static std::shared_ptr<RuntimeEngine> getInstance();
+		static RuntimeEngine* create(uint64_t reservedMemory);
+		static RuntimeEngine* getInstance();
 
-		std::shared_ptr<Graphics::GameWindow> getWindow();
-		std::shared_ptr<Resources::AssetManager> getAssetManager();
+		Graphics::GameWindow* getWindow();
+		Resources::AssetManager* getAssetManager();
 		
 		void loadGame(std::string path);
 		void closeGame();
 
 		void quit();
-		void setRenderPipeline(std::shared_ptr<Graphics::RenderPipeline> pipeline);
+		void setRenderPipeline(Graphics::RenderPipeline* pipeline);
 	};
 }

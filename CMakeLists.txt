@@ -11,6 +11,12 @@ set(SOURCE_FILES
     src/engine/sdl_event_dispatcher.cpp
     src/engine/math/math_types.cpp
 
+    # Memory
+    src/engine/memory/null_allocator.cpp
+    src/engine/memory/free_list.cpp
+    src/engine/memory/stack_allocator.cpp
+    src/engine/memory/memory_utils.cpp
+
     # Resources
     src/engine/resource/registry.cpp
     src/engine/resource/texture_importer.cpp
@@ -54,7 +60,7 @@ set(SOURCE_FILES
 
     # Components
     src/engine/game/ecs/components/component.cpp
-    src/engine/game/ecs/components/component_registry.cpp
+    src/engine/game/ecs/components/component_factory.cpp
 
     src/engine/game/ecs/components/transform.cpp
 
@@ -75,7 +81,9 @@ set(HEADER_FILES
     src/engine/memory/segregator.h
     src/engine/memory/byte_literals.h
     src/engine/memory/engine_memory.h
-
+    src/engine/memory/memory_types.h
+    src/engine/memory/free_list.h
+    src/engine/memory/memory_utils.h
 
     # Resources
     src/engine/resource/fileio.h
@@ -123,7 +131,7 @@ set(HEADER_FILES
 
     # Components
     src/engine/game/ecs/components/component.h
-    src/engine/game/ecs/components/component_registry.h
+    src/engine/game/ecs/components/component_factory.h
     src/engine/game/ecs/components/transform.h
 
     # Systems
@@ -153,6 +161,7 @@ find_package(RapidJSON CONFIG REQUIRED)
 find_package(rttr CONFIG REQUIRED)
 find_package(SDL2_image CONFIG REQUIRED)
 find_package(SDL2 REQUIRED)
+find_package(EASTL CONFIG REQUIRED)
 include_directories(${SDL2_INCLUDE_DIRS})
 
 # Build project
@@ -184,6 +193,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE GLEW::GLEW)
 target_link_libraries(${PROJECT_NAME} PRIVATE SDL2_image::SDL2_image)
 target_link_libraries(${PROJECT_NAME} PRIVATE rapidjson)
 target_link_libraries(${PROJECT_NAME} PRIVATE RTTR::Core)
+target_link_libraries(${PROJECT_NAME} PRIVATE EASTL)
 target_link_libraries(${PROJECT_NAME} PRIVATE crossguid)
 
 # target_link_libraries(${PROJECT_NAME} PRIVATE luau)

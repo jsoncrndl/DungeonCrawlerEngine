@@ -2,7 +2,7 @@
 
 #include <cmath>
 
-namespace Engine::ByteLiterals
+namespace Engine::Memory::ByteLiterals
 {
 	constexpr std::size_t operator""_KiB(uint64_t x) {
 		return 1024ULL * x;

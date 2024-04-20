@@ -114,7 +114,7 @@ namespace Engine
 		mainLoop();
 	}
 
-	std::shared_ptr<RuntimeEngine> RuntimeEngine::create(uint64_t maxMemory)
+	RuntimeEngine* RuntimeEngine::create()
 	{
 		if (instance.get() != nullptr)
 		{
@@ -122,22 +122,22 @@ namespace Engine
 			return instance;
 		}
 
-		instance = std::shared_ptr<RuntimeEngine>(new RuntimeEngine(maxMemory));
+		instance = new RuntimeEngine(maxMemory));
 
 		return instance;
 	}
 
-	std::shared_ptr<RuntimeEngine> RuntimeEngine::getInstance()
+	RuntimeEngine* RuntimeEngine::getInstance()
 	{
 		return instance;
 	}
 
-	std::shared_ptr<Graphics::GameWindow> RuntimeEngine::getWindow()
+	Graphics::GameWindow RuntimeEngine::getWindow()
 	{
 		return m_window;
 	}
 
-	std::shared_ptr<Resources::AssetManager> RuntimeEngine::getAssetManager()
+	Resources::AssetManager RuntimeEngine::getAssetManager()
 	{
 		return m_assetManager;
 	}
@@ -162,7 +162,7 @@ namespace Engine
 	{
 		m_shouldQuit = true;
 	}
-	void RuntimeEngine::setRenderPipeline(std::shared_ptr<Graphics::RenderPipeline> pipeline)
+	void RuntimeEngine::setRenderPipeline(Graphics::RenderPipeline pipeline)
 	{
 		m_renderPipeline = pipeline;
 	}
