@@ -5,6 +5,8 @@
     "gamenetworkingsockets",
     "glew",
     "rapidjson",
-    "rttr"
+    "rttr",
+    "crossguid",
+    "eastl"
   ]
 }

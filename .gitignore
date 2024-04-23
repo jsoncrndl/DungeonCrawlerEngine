@@ -44,6 +44,7 @@ _deps
 [Dd]ebugPublic/
 [Rr]elease/
 [Rr]eleases/
+[Bb]uild/
 x64/
 x86/
 [Ww][Ii][Nn]32/
