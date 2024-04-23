@@ -4,7 +4,7 @@
 
 namespace Engine::Game
 {
-	Game::Game(Engine::RuntimeEngine* engine) : m_currentState(nullptr), m_nextState(GameStateType::LOADING)
+	Game::Game(Engine::RuntimeEngine* engine) : m_nextState(GameStateType::LOADING)
 	{
 	}
 
@@ -15,13 +15,15 @@ namespace Engine::Game
 
 	void Game::update(float deltaSeconds)
 	{
-		m_currentState->update(deltaSeconds);
+		
 	}
 
+#if !DCE_DEDICATED_SERVER
 	void Game::render(Graphics::Graphics* graphics)
 	{
-		m_currentState->render(graphics);
+
 	}
+#endif
 
 	void Game::quit()
 	{

@@ -11,8 +11,10 @@ namespace Engine::Game
 
 	}
 
+#if !DCE_DEDICATED_SERVER
 	void LoadingGameState::render(Graphics::Graphics* graphics)
 	{
 
 	}
+#endif
 }

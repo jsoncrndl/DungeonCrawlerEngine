@@ -4,7 +4,15 @@
 #include <string>
 #include <iostream>
 #include <EASTL/string.h>
+#include "../../memory/memory_types.h"
+#include "../../memory/permanent_allocator.h"
+
+
+#if !DCE_DEDICATED_SERVER
+
 #include "../../graphics/graphics.h"
+
+#endif
 
 namespace Engine::Game
 {
@@ -26,11 +34,10 @@ namespace Engine::Game
 		void allocateMemory();
 
 	public:
-		Level(Game* game, const char*, Memory::Block allocator);
+		Level(Game* game, const char* name, Memory::Block allocator);
 
 		void postLoad();
 		void update(float deltaSeconds);
-		void render(Graphics::Graphics* graphics);
 
 		//template <typename T>
 		//requires std::derived_from<T, ECS::Component>
@@ -44,5 +51,10 @@ namespace Engine::Game
 		// Components
 
 		
+#if !DCE_DEDICATED_SERVER
+
+		void render(Graphics::Graphics* graphics);
+
+#endif
 	};
 }

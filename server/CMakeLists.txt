@@ -11,5 +11,4 @@ elseif (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     target_compile_options(dce-server PRIVATE -Wall -Wextra -pedantic -O3)
 endif()
 
-target_link_libraries(dce-server engine)
-target_compile_definitions(engine PRIVATE DCE_DEDICATED_SERVER=1)
+target_link_libraries(dce-server engine-server)

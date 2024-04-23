@@ -63,6 +63,4 @@ namespace Engine::Resources
 	{
 		return m_textures[location.getProject()]->get(location.getLocation());
 	}
-
-
 }

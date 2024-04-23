@@ -16,9 +16,8 @@ namespace Engine::Game
 		LoadingGameState loadingState;
 		LevelGameState levelState;
 
-		GameState* m_currentState;
 		GameStateType m_nextState;
-		RuntimeEngine* engine;
+		Engine::RuntimeEngine* engine;
 
 		void initializeStates();
 
@@ -27,11 +26,15 @@ namespace Engine::Game
 
 		void load();
 		void update(float deltaSeconds);
-		void render(Graphics::Graphics* graphics);
 
 		void quit();
 
 		// NetworkManager
 		// Assets and resources
+
+#if !DCE_DEDICATED_SERVER
+		void render(Graphics::Graphics* graphics);
+#endif
+
 	};
 }

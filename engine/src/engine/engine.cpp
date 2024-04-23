@@ -31,10 +31,7 @@ namespace Engine
 
 	RuntimeEngine::RuntimeEngine(Memory::Block block) :
 		m_allocator(EngineAllocator{ block, "Engine Allocator" }),
-		m_game(nullptr),
-		m_activeRenderPipeline(nullptr),
-		m_window(nullptr),
-		m_assetManager(nullptr)
+		m_game(nullptr)
 	{
 	}
 
@@ -113,25 +110,17 @@ namespace Engine
 		return &m_allocator;
 	}
 
-	Graphics::GameWindow* RuntimeEngine::getWindow()
-	{
-		return m_window;
-	}
 
-	Resources::AssetManager* RuntimeEngine::getAssetManager()
-	{
-		return m_assetManager;
-	}
 
-	void RuntimeEngine::loadGame(std::string path)
-	{
-		if (m_game != nullptr)
-		{
-			closeGame();
-		}
+	//void RuntimeEngine::loadGame(std::string path)
+	//{
+	//	if (m_game != nullptr)
+	//	{
+	//		closeGame();
+	//	}
 
-		m_game = Factory::create<Game::Game>(this);
-	}
+	//	m_game = Factory::create<Game::Game>(this);
+	//}
 
 	void RuntimeEngine::closeGame()
 	{
@@ -143,9 +132,21 @@ namespace Engine
 	{
 		m_shouldQuit = true;
 	}
+
+#if !DCE_DEDICATED_SERVER
+	Graphics::GameWindow* RuntimeEngine::getWindow()
+	{
+		return m_window;
+	}
+
+	Resources::AssetManager* RuntimeEngine::getAssetManager()
+	{
+		return m_assetManager;
+	}
+
 	void RuntimeEngine::setRenderPipeline(Graphics::RenderPipeline* pipeline)
 	{
-#if !DCE_DEDICATED_SERVER
+
 		if (pipeline == nullptr)
 		{
 			m_activeRenderPipeline = m_defaultRenderPipeline;
@@ -154,13 +155,15 @@ namespace Engine
 		{
 			m_activeRenderPipeline = pipeline;
 		}
-#endif
 	}
 
 	Graphics::Graphics* RuntimeEngine::getGraphics()
 	{
 		return m_graphics;
 	}
+#endif
+
+
 
 	void RuntimeEngine::cleanUp()
 	{

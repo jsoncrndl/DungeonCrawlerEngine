@@ -1,6 +1,11 @@
 #pragma once
 
 #include <memory>
+#include <EASTL/string.h>
+
+#include "memory/permanent_allocator.h"
+
+#if !DCE_DEDICATED_SERVER
 
 #include "graphics/game_window.h"
 #include "graphics/graphics.h"
@@ -8,7 +13,9 @@
 #include "sdl_event_dispatcher.h"
 #include "resource/registry.h"
 #include "resource/asset_manager.h"
-#include "memory/permanent_allocator.h"
+
+#endif
+
 
 namespace Engine
 {
@@ -39,13 +46,6 @@ namespace Engine
 			static T* create(Arg1 arg1, Arg2 arg2);
 		};
 
-		Graphics::GameWindow* m_window;
-		Graphics::Graphics* m_graphics;
-		Graphics::RenderPipeline* m_defaultRenderPipeline;
-		EventDispatcher* m_eventDispatcher;
-		Graphics::RenderPipeline* m_activeRenderPipeline;
-		Resources::AssetManager* m_assetManager;
-
 		Game::Game* m_game;
 
 		bool m_shouldQuit = false;
@@ -62,19 +62,31 @@ namespace Engine
 	public:
 		void start();
 		EngineAllocator* getAllocator();
-
-		Graphics::GameWindow* getWindow();
-		Resources::AssetManager* getAssetManager();
 		
-		void loadGame(std::string path);
+		//void loadGame(std::string path);
 		void closeGame();
 
 		void quit();
-		void setRenderPipeline(Graphics::RenderPipeline* pipeline);
-		Graphics::Graphics* getGraphics();
-
 
 		static void cleanUp();
+
+#if !DCE_DEDICATED_SERVER
+		
+	private:
+		Graphics::GameWindow* m_window;
+		Graphics::Graphics* m_graphics;
+		Graphics::RenderPipeline* m_defaultRenderPipeline;
+		EventDispatcher* m_eventDispatcher;
+		Graphics::RenderPipeline* m_activeRenderPipeline;
+		Resources::AssetManager* m_assetManager;
+
+	public:
+		Graphics::GameWindow* getWindow();
+		Resources::AssetManager* getAssetManager();
+		void setRenderPipeline(Graphics::RenderPipeline* pipeline);
+		Graphics::Graphics* getGraphics();
+#endif
+
 	};
 
 	template<typename T>

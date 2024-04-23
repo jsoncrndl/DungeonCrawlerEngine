@@ -22,13 +22,17 @@ namespace Engine::Game
     {
     }
 
-    void Level::render(Graphics::Graphics* graphics)
-    {
-        
-    }
-
     Game* Level::getGame()
     {
         return m_game;
     }
+
+#if !DCE_DEDICATED_SERVER
+
+    void Level::render(Graphics::Graphics* graphics)
+    {
+
+    }
+
+#endif
 }

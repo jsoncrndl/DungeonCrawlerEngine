@@ -1,6 +1,10 @@
 #pragma once
+
+#if !DCE_DEDICATED_SERVER
+
 #include "../../graphics/graphics.h";
 
+#endif
 
 namespace Engine::Game
 {
@@ -9,6 +13,9 @@ namespace Engine::Game
 	public:
 		void initialize();
 		void update(float deltaSeconds);
+
+#if !DCE_DEDICATED_SERVER
 		void render(Graphics::Graphics* graphics);
+#endif
 	};
 }
