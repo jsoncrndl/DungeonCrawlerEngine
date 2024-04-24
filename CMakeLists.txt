@@ -14,6 +14,7 @@ find_package(rttr CONFIG REQUIRED)
 find_package(SDL2_image CONFIG REQUIRED)
 find_package(SDL2 REQUIRED)
 find_package(EASTL CONFIG REQUIRED)
+find_package(miniz CONFIG REQUIRED)
 include_directories(${SDL2_INCLUDE_DIRS})
 
 # include(FetchContent)

@@ -26,7 +26,7 @@ namespace Engine::Game::ECS
 
 	Component* Entity::addComponent(Component* component)
 	{
-		return nullptr;
+		return component;
 	}
 
 	void Entity::Destroy()

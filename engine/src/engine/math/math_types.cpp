@@ -8,6 +8,12 @@ namespace Engine
     Vector2::Vector2(float _x, float _y) : x(_x), y(_y) {}
     Vector2::Vector2(const Vector2Int& other) : x(static_cast<float>(other.x)), y(static_cast<float>(other.y)) {}
 
+    Vector2::Vector2(const Vector2& other)
+    {
+        x = other.x;
+        y = other.y;
+    }
+
     Vector2 Vector2::operator+(const Vector2& other) const {
         return Vector2(x + other.x, y + other.y);
     }
@@ -46,6 +52,23 @@ namespace Engine
         x /= scalar;
         y /= scalar;
         return *this;
+    }
+
+    Vector2& Vector2::operator=(const Vector2& other)
+    {
+        x = other.x;
+        y = other.y;
+        return *this;
+    }
+
+    bool Vector2::operator==(const Vector2& other)
+    {
+        return x == other.x && y == other.y;
+    }
+
+    bool Vector2::operator!=(const Vector2& other)
+    {
+        return x != other.x || y != other.y;
     }
 
     float Vector2::dot(const Vector2& other) const {

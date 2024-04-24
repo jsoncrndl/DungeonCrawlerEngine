@@ -11,6 +11,7 @@ namespace Engine
         Vector2();
         Vector2(float _x, float _y);
         Vector2(const Vector2Int& other);
+        Vector2(const Vector2& other);
 
         float x;
         float y;
@@ -23,6 +24,11 @@ namespace Engine
         Vector2& operator-=(const Vector2& other);
         Vector2& operator*=(float scalar);
         Vector2& operator/=(float scalar);
+        Vector2& operator=(const Vector2& other);
+        bool operator==(const Vector2& other);
+        bool operator!=(const Vector2& other);
+
+
         float dot(const Vector2& other) const;
         float magnitude() const;
         Vector2 normalized() const;
