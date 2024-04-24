@@ -5,7 +5,7 @@ namespace Engine::Game
 {
     void Level::allocateMemory()
     {
-
+        
     }
 
     Level::Level(Game* game, const char* name, Memory::Block memory) :

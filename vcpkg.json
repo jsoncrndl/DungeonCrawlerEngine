@@ -2,11 +2,12 @@
   "dependencies": [
     "sdl2",
     "sdl2-image",
-    "gamenetworkingsockets",
     "glew",
+    "gamenetworkingsockets",
     "rapidjson",
     "rttr",
     "crossguid",
-    "eastl"
+    "eastl",
+    "miniz"
   ]
 }
