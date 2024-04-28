@@ -1,5 +1,6 @@
 #include <SDL.h>
 #include <engine/engine.h>
+#include <engine/color.h>
 
 int SDL_main(int argc, char* argv[])
 {

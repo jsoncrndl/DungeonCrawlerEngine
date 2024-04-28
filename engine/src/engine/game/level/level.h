@@ -4,13 +4,17 @@
 #include <string>
 #include <iostream>
 #include <EASTL/string.h>
-#include "../../memory/memory_types.h"
-#include "../../memory/permanent_allocator.h"
+
+#include "engine/memory/memory_types.h"
+#include "engine/memory/permanent_allocator.h"
 
 
 #if !DCE_DEDICATED_SERVER
 
-#include "../../graphics/graphics.h"
+#include "engine/graphics/graphics.h"
+#include "../ecs/systems/sprite_render_system.h"
+#include "../ecs/systems/particle_system.h"
+#include "../ecs/systems/camera_system.h"
 
 #endif
 
@@ -23,35 +27,40 @@ namespace Engine::Game
 		using ComponentPool = Engine::Memory::PoolAllocator<sizeof(T), alignof(T)>;*/
 
 		using LevelAllocator = Memory::PermanentAllocator;
-
-		//friend class LevelSerializer;
 		friend class LevelDeserializer;
 
+	private:
+	
 		LevelAllocator m_allocator;
 		Game* m_game;
 
-	private:
 		void allocateMemory();
-
+		 
 	public:
 		Level(Game* game, const char* name, Memory::Block allocator);
 
 		void postLoad();
 		void update(float deltaSeconds);
 
-		//template <typename T>
-		//requires std::derived_from<T, ECS::Component>
-		//ObjectPool<T>* getComponentPool();
-		
-		//ObjectPool<ECS::Entity>* getEntityPool();
-
 		Game* getGame();
 		// Systems
 		// Entities
 		// Components
-
 		
+
+
+
+
 #if !DCE_DEDICATED_SERVER
+	private:
+		ECS::SpriteRenderSystem* m_spriteRenderSystem;
+		ECS::ParticleSystem* m_particleSystem;
+		ECS::CameraSystem* m_cameraSystem;
+
+	public:
+		ECS::SpriteRenderSystem* getSpriteRenderSystem();
+		ECS::ParticleSystem* getParticleSystem();
+		ECS::CameraSystem* getCameraSystem();
 
 		void render(Graphics::Graphics* graphics);
 

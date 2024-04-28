@@ -6,7 +6,7 @@
 #include <SDL.h>
 
 #include "game_window.h"
-#include "../math/math_types.h"
+#include "engine/math_types.h"
 #include "render_texture.h"
 #include "sprite.h"
 #include "texture.h"

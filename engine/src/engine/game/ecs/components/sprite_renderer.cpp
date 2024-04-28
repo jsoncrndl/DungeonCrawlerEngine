@@ -14,9 +14,13 @@ namespace Engine::Game::ECS
 
 #if !DCE_DEDICATED_SERVER
 
-	Graphics::Sprite SpriteRenderer::getSprite()
+	Graphics::Sprite SpriteRenderer::getSprite() const
 	{
 		return m_sprite;
+	}
+	std::shared_ptr<Graphics::Material> SpriteRenderer::getMaterial() const
+	{
+		return m_material;
 	}
 	void SpriteRenderer::setSprite(const Graphics::Sprite& sprite)
 	{

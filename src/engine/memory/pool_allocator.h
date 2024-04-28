@@ -4,6 +4,8 @@
 #include <memory>
 #include "memory_types.h"
 #include "free_list.h"
+#include "memory_utils.h"
+
 
 namespace Engine::Memory
 {
@@ -64,7 +66,7 @@ namespace Engine::Memory
 	template<size_t ElementSize, size_t ElementAlign>
 	inline bool PoolAllocator<ElementSize, ElementAlign>::owns(Block block)
 	{
-		return true;//MemoryUtils::isSubBlock(block, m_allocatedBlock);
+		return MemoryUtils::isSubBlock(block, m_allocatedBlock);
 	}
 
 	template<size_t ElementSize, size_t ElementAlign>

@@ -13,6 +13,7 @@
 #include "sdl_event_dispatcher.h"
 #include "resource/registry.h"
 #include "resource/asset_manager.h"
+#include "input/input_receiver.h"
 
 #endif
 
@@ -25,6 +26,9 @@ namespace Engine
 	}
 
 	class RuntimeEngine
+#if !DCE_DEDICATED_SERVER
+		: public Input::InputReceiver
+#endif
 	{
 	public:
 		static RuntimeEngine Engine;
@@ -63,7 +67,7 @@ namespace Engine
 		void start();
 		EngineAllocator* getAllocator();
 		
-		//void loadGame(std::string path);
+		void loadGame(eastl::string path);
 		void closeGame();
 
 		void quit();
@@ -73,6 +77,7 @@ namespace Engine
 #if !DCE_DEDICATED_SERVER
 		
 	private:
+		Input::Input* m_input;
 		Graphics::GameWindow* m_window;
 		Graphics::Graphics* m_graphics;
 		Graphics::RenderPipeline* m_defaultRenderPipeline;
@@ -85,6 +90,9 @@ namespace Engine
 		Resources::AssetManager* getAssetManager();
 		void setRenderPipeline(Graphics::RenderPipeline* pipeline);
 		Graphics::Graphics* getGraphics();
+
+		void receiveInput(const Input::InputEvent& event) override;
+
 #endif
 
 	};

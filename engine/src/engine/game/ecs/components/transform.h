@@ -1,7 +1,7 @@
 #pragma once
 
 #include "component.h"
-#include "../../../math/math_types.h"
+#include "engine/math_types.h"
 
 namespace Engine::Game::ECS
 {
@@ -10,7 +10,7 @@ namespace Engine::Game::ECS
 	private:
 		Transform* m_parent;
 		Vector2 m_localPosition;
-		Vector2 m_localScale;
+		Vector2 m_size;
 		float m_localRotation;
 
 	public:
@@ -29,7 +29,9 @@ namespace Engine::Game::ECS
 		Transform* getParent() const;
 		void setParent(Transform* parent);
 
-		Vector2 getLocalScale() const;
-		void setLocalScale(const Vector2& scale);
+		Vector2 getSize() const;
+		void setSize(const Vector2& scale);
+
+		Matrix3x3 getMatrix();
 	};
 }

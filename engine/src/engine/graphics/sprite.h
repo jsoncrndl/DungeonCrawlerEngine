@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include "../math/math_types.h"
+#include "engine/math_types.h"
 #include "texture.h"
 
 namespace Engine::Graphics

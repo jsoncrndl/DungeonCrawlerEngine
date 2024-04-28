@@ -3,8 +3,8 @@
 namespace Engine
 {
 	
-	EventDispatcher::EventDispatcher(Graphics::GameWindow* m_window) :
-		m_window(m_window)
+	EventDispatcher::EventDispatcher(Graphics::GameWindow* window, Input::Input* input) :
+		m_window(window), m_input(input)
 	{
 	}
 
@@ -33,9 +33,14 @@ namespace Engine
 		SDL_Event e;
 		while (SDL_PollEvent(&e) > 0)
 		{
-			if (e.type == SDL_WINDOWEVENT)
+			switch (e.type)
 			{
-				m_window->handleEvent(e);
+			case SDL_WINDOWEVENT:
+				m_window->handleEvent(e.window);
+				break;
+			case SDL_KEYDOWN:
+			case SDL_KEYUP:
+				m_input->handleEvent(e.key);
 			}
 		}
 

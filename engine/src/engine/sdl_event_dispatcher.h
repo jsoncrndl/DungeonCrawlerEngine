@@ -12,10 +12,11 @@ namespace Engine
 	class EventDispatcher
 	{
 		Graphics::GameWindow* m_window;
+		Input::Input* m_input;
 		void receiveEvents();
 
 	public:
-		EventDispatcher(Graphics::GameWindow* m_window);
+		EventDispatcher(Graphics::GameWindow* window, Input::Input* input);
 		~EventDispatcher();
 
 		void handleEvents();

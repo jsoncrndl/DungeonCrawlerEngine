@@ -1,8 +1,9 @@
 #pragma once
 
 #include <memory>
-#include "SDL.h"
-#include "../math//math_types.h"
+#include <SDL.h>
+
+#include "engine/math_types.h"
 
 namespace Engine::Graphics
 {

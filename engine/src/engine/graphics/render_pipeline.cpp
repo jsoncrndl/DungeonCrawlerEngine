@@ -1,5 +1,5 @@
 #include "render_pipeline.h"
-#include "../engine.h"
+#include "engine/engine.h"
 
 namespace Engine::Graphics
 {
@@ -28,17 +28,7 @@ namespace Engine::Graphics
 		graphics->setProjectionMatrix(Matrix3x3({ 2 / static_cast<float>(m_mainTexture->getWidth()), 0, 0, 0, 2 / static_cast<float>(m_mainTexture->getHeight()), 0, 0, 0, 1 }));
 		graphics->setViewMatrix(Matrix3x3({ 16, 0, 0, 0, 16, 0, 0, 0, 1 }));
 
-		//loadedGame.render();
-		//graphics->drawTexture(m_testTexture, m_testTexture->getRect(), m_mainTexture->getRect(), nullptr);
 
-		Sprite sprite{ m_grid, m_grid->getRect() };
-		graphics->drawSprite(sprite, Vector2(0, 0), Vector2(1, 1), 0, nullptr);
-		graphics->drawSprite(sprite, Vector2(1, 1), Vector2(1, 1), 0, nullptr);
-		graphics->drawSprite(sprite, Vector2(4, 0), Vector2(1, 1), 0, nullptr);
-		graphics->drawSprite(sprite, Vector2(6, 0), Vector2(1, 1), 0, nullptr);
-		graphics->drawSprite(sprite, Vector2(-2, 0), Vector2(1, 1), 0, nullptr);
-		graphics->drawSprite(sprite, Vector2(-4, 0), Vector2(1, 1), 0, nullptr);
-		graphics->drawSprite(sprite, Vector2(-6, 0), Vector2(1, 1), 0, nullptr);
 
 		// Switch to window, scale texture and display
 		graphics->setRenderTarget(nullptr);

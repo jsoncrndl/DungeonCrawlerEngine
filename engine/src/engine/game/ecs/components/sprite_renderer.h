@@ -5,9 +5,11 @@
 
 #if !DCE_DEDICATED_SERVER
 
-#include "../../../graphics/sprite.h"
+#include "engine/graphics/sprite.h"
+#include "engine/graphics/material.h"
 
 #endif
+
 
 namespace Engine::Game::ECS
 {
@@ -24,9 +26,11 @@ namespace Engine::Game::ECS
 #if !DCE_DEDICATED_SERVER
     private:
         Graphics::Sprite m_sprite;
+        std::shared_ptr<Graphics::Material> m_material;
 
     public:
-        Graphics::Sprite getSprite();
+        Graphics::Sprite getSprite() const;
+        std::shared_ptr<Graphics::Material> getMaterial() const;
         void setSprite(const Graphics::Sprite& sprite);
 #endif
     };

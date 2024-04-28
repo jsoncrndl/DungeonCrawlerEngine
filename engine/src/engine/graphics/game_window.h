@@ -3,10 +3,9 @@
 #include <SDL.h>
 #include <EASTL/functional.h>
 #include <EASTL/fixed_vector.h>
-#include <EASTL/unordered_map.h>
 #include <EASTL/array.h>
-#include "../math/math_types.h"
-#include "../memory/permanent_allocator.h"
+#include "engine/math_types.h"
+#include "engine/memory/permanent_allocator.h"
 
 namespace Engine {
 	class EventDispatcher;
@@ -58,7 +57,7 @@ namespace Engine {
 
 			void invokeWindowEvent(WindowEvent event);
 			void invokeWindowEvent(WindowEvent event, WindowEventData data);
-			void handleEvent(SDL_Event e);
+			void handleEvent(SDL_WindowEvent e);
 
 			GameWindow(GameWindow&);
 

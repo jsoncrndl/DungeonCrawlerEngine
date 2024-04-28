@@ -1,4 +1,5 @@
 #include "transform.h"
+#include <cmath>
 
 namespace Engine::Game::ECS
 {
@@ -100,12 +101,35 @@ namespace Engine::Game::ECS
 			setWorldRotation(previousRotation);
 		}
 	}
-	Vector2 Transform::getLocalScale() const
+	Vector2 Transform::getSize() const
 	{
-		return m_localScale;
+		return m_size;
 	}
-	void Transform::setLocalScale(const Vector2& scale)
+	void Transform::setSize(const Vector2& scale)
 	{
-		m_localScale = scale;
+		m_size = scale;
+	}
+	Matrix3x3 Transform::getMatrix()
+	{
+		Matrix3x3 rotation = Matrix3x3({
+			std::cos(m_localRotation), -std::sin(m_localRotation), 0,
+			std::sin(m_localRotation), std::cos(m_localRotation), 0,
+			0, 0, 1
+		});
+
+		Matrix3x3 scaleTranslate = Matrix3x3({
+			m_size.x, 0, 0,
+			0, m_size.y, 0,
+			m_localPosition.x, m_localPosition.y, 0
+		});
+
+		if (m_parent == nullptr)
+		{
+			return rotation * scaleTranslate;
+		}
+		else
+		{
+			return m_parent->getMatrix() * rotation * scaleTranslate;
+		}
 	}
 }

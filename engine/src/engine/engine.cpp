@@ -40,8 +40,9 @@ namespace Engine
 
 #if !DCE_DEDICATED_SERVER
 		initGraphics();
-
-		m_eventDispatcher = new EventDispatcher(m_window);
+		m_input = Factory::create<Input::Input>();
+		m_input->setInputReceiver(this);
+		m_eventDispatcher = Factory::create<EventDispatcher>(m_window, m_input);
 #endif
 	}
 
@@ -160,6 +161,11 @@ namespace Engine
 	Graphics::Graphics* RuntimeEngine::getGraphics()
 	{
 		return m_graphics;
+	}
+	void RuntimeEngine::receiveInput(const Input::InputEvent& event)
+	{
+		Input::InputEvent e = event;
+		std::cout << "Key: " << SDL_GetKeyName(static_cast<SDL_Keycode>(e.key)) << ", Type: " << static_cast<uint8_t>(event.type) << "\n";
 	}
 #endif
 

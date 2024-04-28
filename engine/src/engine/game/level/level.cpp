@@ -29,6 +29,21 @@ namespace Engine::Game
 
 #if !DCE_DEDICATED_SERVER
 
+    ECS::SpriteRenderSystem* Level::getSpriteRenderSystem()
+    {
+        return m_spriteRenderSystem;
+    }
+
+    ECS::ParticleSystem* Level::getParticleSystem()
+    {
+        return m_particleSystem;
+    }
+
+    ECS::CameraSystem* Level::getCameraSystem()
+    {
+        return m_cameraSystem;
+    }
+
     void Level::render(Graphics::Graphics* graphics)
     {
 

@@ -61,40 +61,37 @@ namespace Engine::Graphics
 		return m_height;
 	}
 
-	void GameWindow::handleEvent(SDL_Event e)
+	void GameWindow::handleEvent(SDL_WindowEvent e)
 	{
-		if (e.type == SDL_WINDOWEVENT)
+		switch (e.event)
 		{
-			switch (e.window.event)
-			{
-			case SDL_WINDOWEVENT_CLOSE:
-				invokeWindowEvent(WindowEvent::CLOSE);
-				break;
-			case SDL_WINDOWEVENT_MINIMIZED:
-				invokeWindowEvent(WindowEvent::MINIMIZE);
-				break;
-			case SDL_WINDOWEVENT_MAXIMIZED:
-				invokeWindowEvent(WindowEvent::MAXIMIZE);
-				break;
-			case SDL_WINDOWEVENT_SIZE_CHANGED:
-				invokeWindowEvent(WindowEvent::RESIZE, WindowEventData(e.window.data1, e.window.data2));
-				break;
-			case SDL_WINDOWEVENT_SHOWN:
-				invokeWindowEvent(WindowEvent::SHOW);
-				break;
-			case SDL_WINDOWEVENT_HIDDEN:
-				invokeWindowEvent(WindowEvent::HIDE);
-				break;
-			case SDL_WINDOWEVENT_FOCUS_GAINED:
-				invokeWindowEvent(WindowEvent::FOCUS);
-				break;
-			case SDL_WINDOWEVENT_FOCUS_LOST:
-				invokeWindowEvent(WindowEvent::UNFOCUS);
-				break;
-			case SDL_WINDOWEVENT_MOVED:
-				invokeWindowEvent(WindowEvent::MOVE);
-				break;
-			}
+		case SDL_WINDOWEVENT_CLOSE:
+			invokeWindowEvent(WindowEvent::CLOSE);
+			break;
+		case SDL_WINDOWEVENT_MINIMIZED:
+			invokeWindowEvent(WindowEvent::MINIMIZE);
+			break;
+		case SDL_WINDOWEVENT_MAXIMIZED:
+			invokeWindowEvent(WindowEvent::MAXIMIZE);
+			break;
+		case SDL_WINDOWEVENT_SIZE_CHANGED:
+			invokeWindowEvent(WindowEvent::RESIZE, WindowEventData(e.data1, e.data2));
+			break;
+		case SDL_WINDOWEVENT_SHOWN:
+			invokeWindowEvent(WindowEvent::SHOW);
+			break;
+		case SDL_WINDOWEVENT_HIDDEN:
+			invokeWindowEvent(WindowEvent::HIDE);
+			break;
+		case SDL_WINDOWEVENT_FOCUS_GAINED:
+			invokeWindowEvent(WindowEvent::FOCUS);
+			break;
+		case SDL_WINDOWEVENT_FOCUS_LOST:
+			invokeWindowEvent(WindowEvent::UNFOCUS);
+			break;
+		case SDL_WINDOWEVENT_MOVED:
+			invokeWindowEvent(WindowEvent::MOVE);
+			break;
 		}
 	}
 
