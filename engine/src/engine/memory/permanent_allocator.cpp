@@ -20,8 +20,6 @@ namespace Engine::Memory
             throw std::exception("Out of memory!");
         }
 
-        std::cout << m_name << " allocated " << size << " bytes\n";
-
         return allocateStart == nullptr ? Block() : Block(allocateStart, size);
     }
 

@@ -16,8 +16,7 @@ namespace Engine::Memory
 	public:
 
 		PermanentAllocator(Block block, const char* name = nullptr);
-		
-	
+
 		Block allocate(size_t size, size_t align);
 		void* allocate(size_t n, int flags = 0);
 		void* allocate(size_t n, size_t alignment, size_t offset, int flags = 0);

@@ -1,4 +1,5 @@
 #include "gs_level.h"
+#include "../game.h"
 
 namespace Engine::Game
 {

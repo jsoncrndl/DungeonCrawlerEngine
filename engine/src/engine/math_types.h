@@ -33,6 +33,11 @@ namespace Engine
         float magnitude() const;
         Vector2 normalized() const;
         float angle(const Vector2& other) const;
+
+        static const Vector2 zero;
+        static const Vector2 one;
+        static const Vector2 right;
+        static const Vector2 up;
     };
 
     struct Vector2Int {

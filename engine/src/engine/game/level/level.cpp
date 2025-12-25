@@ -16,10 +16,31 @@ namespace Engine::Game
 
     void Level::postLoad()
     {
+        
     }
 
     void Level::update(float deltaSeconds)
     {
+#if !DCE_DEDICATED_SERVER
+        m_particleSystem->update(deltaSeconds);
+#endif
+
+
+
+        // Destroy objects
+        for (ECS::Entity* entity : m_entitiesToDestroy)
+        {
+            m_entities.remove(entity);
+            // Return entity to pool
+        }
+        m_entitiesToDestroy.clear();
+
+        // Add objects
+        for (ECS::Entity* entity : m_entitiesToAdd)
+        {
+            m_entities.push_back(entity);
+        }
+        m_entitiesToAdd.clear();
     }
 
     Game* Level::getGame()
@@ -33,7 +54,6 @@ namespace Engine::Game
     {
         return m_spriteRenderSystem;
     }
-
     ECS::ParticleSystem* Level::getParticleSystem()
     {
         return m_particleSystem;
@@ -46,7 +66,14 @@ namespace Engine::Game
 
     void Level::render(Graphics::Graphics* graphics)
     {
+#if !DCE_DEDICATED_SERVER
+        
+#endif
+    }
 
+    void Level::addEntity(ECS::Entity* entity)
+    {
+        m_entitiesToAdd.push_back(entity);
     }
 
 #endif

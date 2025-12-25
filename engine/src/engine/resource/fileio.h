@@ -74,7 +74,6 @@ namespace Engine::IO
 
 		for (auto& file : std::filesystem::recursive_directory_iterator(directoryPath))
 		{
-
 			if (file.is_regular_file())
 			{
 				foundPaths.push_back(file.path().string());

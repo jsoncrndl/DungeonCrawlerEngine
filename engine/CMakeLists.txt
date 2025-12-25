@@ -2,6 +2,7 @@ set(SOURCE_FILES
     src/engine/engine.cpp
     src/engine/math_types.cpp
     src/engine/color.cpp
+    src/engine/logging.cpp
 
     # Memory
     src/engine/memory/permanent_allocator.cpp
@@ -16,13 +17,19 @@ set(SOURCE_FILES
     src/engine/game/game_settings.cpp
     src/engine/game/serializable.cpp
     src/engine/game/game_loader.cpp
+    src/engine/game/game_builder.cpp
 
     # Network
+    src/engine/game/network/network_manager.cpp
+    src/engine/game/network/network_client.cpp
+    src/engine/game/network/network_server.cpp
+    src/engine/game/network/network_connection.cpp
 
     # ECS
 
     # Entites
     src/engine/game/ecs/entities/entity.cpp
+    src/engine/game/ecs/entities/test_entities.cpp
 
     # Components
     src/engine/game/ecs/components/component.cpp
@@ -39,6 +46,8 @@ set(HEADER_FILES
     src/engine/engine.h
     src/engine/math_types.h
     src/engine/color.h
+    src/engine/game_like.h
+    src/engine/logging.h
 
     # Memory
     src/engine/memory/permanent_allocator.h
@@ -46,6 +55,7 @@ set(HEADER_FILES
     src/engine/memory/memory_types.h
     src/engine/memory/pool_allocator.h
     src/engine/memory/free_list.h
+    src/engine/memory/factory.h
 
     # Game
     src/engine/game/game.h
@@ -56,8 +66,16 @@ set(HEADER_FILES
     src/engine/game/game_settings.h
     src/engine/game/game_loader.h
     src/engine/game/serializable.h
+    src/engine/game/game_builder.h
 
     # Network
+    src/engine/game/network/connection_type.h
+    src/engine/game/network/network_manager.h
+    src/engine/game/network/network_client.h
+    src/engine/game/network/network_server.h
+    src/engine/game/network/network_connection.h
+    src/engine/game/network/ip_address.h
+    src/engine/game/network/connection_result.h
     src/engine/game/network/connection_type.h
 
     # ECS
@@ -65,15 +83,16 @@ set(HEADER_FILES
 
     # Entities
     src/engine/game/ecs/entities/entity.h
-    src/engine/game/ecs/components/sprite_renderer.h
-    src/engine/game/ecs/components/particle_emitter_component.h
-    src/engine/game/ecs/components/player_component.h
+    src/engine/game/ecs/entities/test_entities.h
 
     # Components
     src/engine/game/ecs/components/component.h
     src/engine/game/ecs/components/component_factory.h
     src/engine/game/ecs/components/transform.h
     src/engine/game/ecs/components/camera.h
+    src/engine/game/ecs/components/sprite_renderer.h
+    src/engine/game/ecs/components/particle_emitter_component.h
+    src/engine/game/ecs/components/player_component.h
 
 )
 
@@ -92,7 +111,6 @@ set(CLIENT_SOURCE_FILES
 
     # Graphics
     src/engine/graphics/graphics.cpp
-    src/engine/graphics/render_pipeline.cpp
     src/engine/graphics/game_window.cpp
     src/engine/graphics/sprite.cpp
     src/engine/graphics/texture.cpp
@@ -101,14 +119,18 @@ set(CLIENT_SOURCE_FILES
     src/engine/graphics/material.cpp
     src/engine/graphics/shader.cpp
 
+    src/engine/game/game_render_pipeline.cpp
+
     # Particles
     src/engine/game/particles/particle_effect.cpp
     src/engine/game/particles/particle_emitter.cpp
     
+
     # Systems
     src/engine/game/ecs/systems/particle_system.cpp
     src/engine/game/ecs/systems/sprite_render_system.cpp
     src/engine/game/ecs/systems/camera_system.cpp
+    src/engine/game/ecs/systems/input_system.cpp
 )
 
 set(CLIENT_HEADER_FILES
@@ -139,6 +161,8 @@ set(CLIENT_HEADER_FILES
     src/engine/graphics/material.h
     src/engine/graphics/shader.h
 
+    src/engine/game/game_render_pipeline.h
+
     # Particles
     src/engine/game/particles/particle_effect.h
     src/engine/game/particles/particle_emitter.h
@@ -149,6 +173,7 @@ set(CLIENT_HEADER_FILES
     src/engine/game/ecs/systems/particle_system.h
     src/engine/game/ecs/systems/sprite_render_system.h
     src/engine/game/ecs/systems/camera_system.h
+    src/engine/game/ecs/systems/input_system.h
 )
 
 source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/src" PREFIX "Source Files" FILES ${SOURCE_FILES} ${CLIENT_SOURCE_FILES})
@@ -187,16 +212,18 @@ target_link_libraries(engine PUBLIC rapidjson)
 target_link_libraries(engine PUBLIC RTTR::Core)
 target_link_libraries(engine PUBLIC EASTL)
 target_link_libraries(engine PUBLIC crossguid)
-target_link_libraries(engine PUBLIC miniz::miniz)
+target_link_libraries(engine PUBLIC spdlog::spdlog)
+target_link_libraries(engine PRIVATE unofficial::minizip::minizip)
+# target_link_libraries(engine PUBLIC luau)
 
 
-# Eventually engine-server should remove GLEW and SDL2 from dependencies
 target_link_libraries(engine-server PUBLIC GameNetworkingSockets::shared)
 target_link_libraries(engine-server PUBLIC rapidjson)
 target_link_libraries(engine-server PUBLIC RTTR::Core)
 target_link_libraries(engine-server PUBLIC EASTL)
 target_link_libraries(engine-server PUBLIC crossguid)
-target_link_libraries(engine-server PUBLIC miniz::miniz)
+target_link_libraries(engine-server PUBLIC spdlog::spdlog)
+target_link_libraries(engine-server PRIVATE unofficial::minizip::minizip)
 # target_link_libraries(engine-server PUBLIC luau)
 
 target_include_directories(engine PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src")

@@ -6,10 +6,10 @@ namespace Engine::Game
 {
     class GameSettings
     {
+    public:
         eastl::string name;
-        eastl::string game_id;
-        uint8_t maxPlayers;
-        uint8_t maxLoadedLevels;
+        eastl::string gameID;
         eastl::string startLevel;
+        uint8_t maxPlayers;
     };
 }

@@ -2,7 +2,7 @@
 
 #if !DCE_DEDICATED_SERVER
 
-#include "../../graphics/graphics.h";
+#include "engine/graphics/graphics.h"
 
 #endif
 

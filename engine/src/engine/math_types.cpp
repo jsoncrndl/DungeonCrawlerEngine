@@ -8,6 +8,11 @@ namespace Engine
     Vector2::Vector2(float _x, float _y) : x(_x), y(_y) {}
     Vector2::Vector2(const Vector2Int& other) : x(static_cast<float>(other.x)), y(static_cast<float>(other.y)) {}
 
+    const Vector2 Vector2::zero{ Vector2(0, 0) };
+    const Vector2 Vector2::one{ Vector2(1, 1) };
+    const Vector2 Vector2::up{ Vector2(0, 1) };
+    const Vector2 Vector2::right{ Vector2(1, 0) };
+
     Vector2::Vector2(const Vector2& other)
     {
         x = other.x;

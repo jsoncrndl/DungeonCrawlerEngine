@@ -1,4 +1,3 @@
-#include <miniz.h>
 #include "game_loader.h"
 
 namespace Engine::Game

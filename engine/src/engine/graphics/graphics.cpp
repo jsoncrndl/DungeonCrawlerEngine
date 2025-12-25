@@ -7,13 +7,13 @@
 namespace Engine::Graphics
 {
 	void GLAPIENTRY
-		MessageCallback(GLenum source,
-			GLenum type,
-			GLuint id,
-			GLenum severity,
-			GLsizei length,
-			const GLchar* message,
-			const void* userParam)
+			MessageCallback(GLenum source,
+				GLenum type,
+				GLuint id,
+				GLenum severity,
+				GLsizei length,
+				const GLchar* message,
+				const void* userParam)
 	{
 		fprintf(stderr, "GL CALLBACK: %s type = 0x%x, severity = 0x%x, message = %s\n",
 			(type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : ""),
@@ -486,7 +486,7 @@ namespace Engine::Graphics
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
 		glDisable(GL_CULL_FACE);
-		
+
 		m_glContext = SDL_GL_CreateContext(window->m_window);
 		glewExperimental = GL_TRUE;
 		GLenum err = glewInit();

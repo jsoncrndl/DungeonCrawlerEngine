@@ -1,4 +1,13 @@
-add_executable(DungeonCrawlerEngine main.cpp)
+set(HEADER_FILES
+    menu/menu.h
+)
+
+set(SOURCE_FILES 
+    menu/menu.cpp
+)
+
+add_executable(DungeonCrawlerEngine main.cpp ${SOURCE_FILES} ${HEADER_FILES})
+
 
 set_property(TARGET DungeonCrawlerEngine PROPERTY CXX_STANDARD 20)
 

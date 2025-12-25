@@ -18,12 +18,31 @@ namespace Engine
 		float deltaTime = 0;
 
 		while (!m_shouldQuit) {
+			if (m_nextGame != nullptr)
+			{
+				if (m_activeGame != nullptr)
+				{
+					closeGame();
+				}
+
+				m_activeGame = m_nextGame;
+				m_nextGame = nullptr;
+				m_activeGame->initialize();
+			}
+
+			if (m_activeGame == nullptr) break;
+		
 			auto now = std::chrono::steady_clock::now();
 
-			handleInput();
-			update(deltaTime);
-			render();
+#if !DCE_DEDICATED_SERVER
+			m_eventDispatcher->handleEvents();
+#endif
 
+			m_activeGame->update(deltaTime);
+
+#if !DCE_DEDICATED_SERVER
+			m_activeGame->render();
+#endif
 			auto endTime = std::chrono::steady_clock::now();
 			deltaTime = std::chrono::duration_cast<std::chrono::microseconds>((endTime - now)).count() / 1000000.0f;
 		}
@@ -31,7 +50,15 @@ namespace Engine
 
 	RuntimeEngine::RuntimeEngine(Memory::Block block) :
 		m_allocator(EngineAllocator{ block, "Engine Allocator" }),
-		m_game(nullptr)
+		m_activeGame(nullptr),
+		m_nextGame(nullptr)
+#if !DCE_DEDICATED_SERVER
+		,m_assetManager(nullptr),
+		m_window(nullptr),
+		m_eventDispatcher(nullptr),
+		m_graphics(nullptr),
+		m_input(nullptr)
+#endif
 	{
 	}
 
@@ -40,59 +67,29 @@ namespace Engine
 
 #if !DCE_DEDICATED_SERVER
 		initGraphics();
-		m_input = Factory::create<Input::Input>();
-		m_input->setInputReceiver(this);
-		m_eventDispatcher = Factory::create<EventDispatcher>(m_window, m_input);
+		m_input = m_factory.create<Input::Input>();
+		m_eventDispatcher = m_factory.create<EventDispatcher>(m_window, m_input);
 #endif
 	}
-
 
 	void RuntimeEngine::initGraphics()
 	{
 #if !DCE_DEDICATED_SERVER
 
-		m_assetManager = Factory::create<Resources::AssetManager>();
+		m_assetManager = m_factory.create<Resources::AssetManager>();
 		m_assetManager->LoadEngineAssets();
 		m_assetManager->LoadResources();
 
-		m_window = Factory::create<Graphics::GameWindow>(m_allocator);
-		m_graphics = Factory::create<Graphics::Graphics>(m_window);
-
-		m_graphics->loadShaders(m_assetManager->getShaders("engine"));
+		m_window = m_factory.create<Graphics::GameWindow>(m_allocator);
+		m_graphics = m_factory.create<Graphics::Graphics>(m_window);
 		m_graphics->loadTextures(m_assetManager->getTextures("engine"));
-
+		m_graphics->loadShaders(m_assetManager->getShaders("engine"));
+		//m_graphics->loadMaterials(m_assetManager->getMaterials("engine"));
 		m_graphics->postLoad();
-
-		m_defaultRenderPipeline = Factory::create<Graphics::RenderPipeline>();
-		m_defaultRenderPipeline->initialize(m_graphics);
-		m_activeRenderPipeline = m_defaultRenderPipeline;
 
 		m_window->registerWindowEventListener(Graphics::WindowEvent::CLOSE, [this](Graphics::WindowEventData eventData) {
 			quit();
-			});
-#endif
-	}
-
-	void RuntimeEngine::handleInput()
-	{
-#if !DCE_DEDICATED_SERVER
-		m_eventDispatcher->handleEvents();
-#endif
-	}
-
-	void RuntimeEngine::update(float deltaTime)
-	{
-		if (m_game != nullptr)
-		{
-			m_game->update(deltaTime);
-		}
-	}
-
-	void RuntimeEngine::render()
-	{
-#if !DCE_DEDICATED_SERVER
-		// Render pipeline should be part of a game
-		m_activeRenderPipeline->render(m_graphics);
+		});
 #endif
 	}
 
@@ -111,8 +108,6 @@ namespace Engine
 		return &m_allocator;
 	}
 
-
-
 	//void RuntimeEngine::loadGame(std::string path)
 	//{
 	//	if (m_game != nullptr)
@@ -123,10 +118,16 @@ namespace Engine
 	//	m_game = Factory::create<Game::Game>(this);
 	//}
 
+	void RuntimeEngine::loadGame(GameLike* game)
+	{
+		m_nextGame = game;
+	}
+
 	void RuntimeEngine::closeGame()
 	{
-		m_game->quit();
-		delete m_game;
+		m_activeGame->quit();
+		m_activeGame = nullptr;
+		// free game memory
 	}
 
 	void RuntimeEngine::quit()
@@ -145,27 +146,9 @@ namespace Engine
 		return m_assetManager;
 	}
 
-	void RuntimeEngine::setRenderPipeline(Graphics::RenderPipeline* pipeline)
-	{
-
-		if (pipeline == nullptr)
-		{
-			m_activeRenderPipeline = m_defaultRenderPipeline;
-		}
-		else
-		{
-			m_activeRenderPipeline = pipeline;
-		}
-	}
-
 	Graphics::Graphics* RuntimeEngine::getGraphics()
 	{
 		return m_graphics;
-	}
-	void RuntimeEngine::receiveInput(const Input::InputEvent& event)
-	{
-		Input::InputEvent e = event;
-		std::cout << "Key: " << SDL_GetKeyName(static_cast<SDL_Keycode>(e.key)) << ", Type: " << static_cast<uint8_t>(event.type) << "\n";
 	}
 #endif
 

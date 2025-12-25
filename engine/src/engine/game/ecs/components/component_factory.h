@@ -1,38 +1,34 @@
 #pragma once
 
-#include <EASTL/allocator.h>
-
+#include "EASTL/fixed_list.h"
 
 namespace Engine::Game::ECS
 {
-	template <typename T>
-	class ComponentFactory
+	/// <summary>
+	/// The internal implementation of this may change overtime. Calling get() will return a newly constructed object from the pool, and calling free will return it to the pool.
+	/// </summary>
+	template<typename Type, uint16_t MaxSize, typename NodeAllocator>
+	class FixedPool
 	{
-		using AllocatorType = eastl::allocator;
+		// Should it be a fixed list of entities or a list of entity ptrs allocated in a pool?
+		eastl::fixed_list<NodeType, MaxSize, false> m_nodeList;
 
-
-		ComponentFactory(AllocatorType allocator);
-		// A bunch of factories for each component?
-
-		static T create();
-		
-		
-		static T destroy();
-
-
+		Type* get();
+		void free(Type* node);
 	};
-	
-	
-	template<typename T>
-	inline T ComponentFactory<T>::create()
+
+	template<typename Type, uint16_t MaxSize, typename NodeAllocator>
+	inline Type* FixedPool<Type, MaxSize, NodeAllocator>::get()
 	{
-		return T();
+		m_nodeList.push_front(Type());
+		return &m_nodeList.front();
+	}
+
+	template<typename Type, uint16_t MaxSize, typename NodeAllocator>
+	inline void FixedPool<Type, MaxSize, NodeAllocator>::free(Type* node)
+	{
+		m_nodeList.remove(*node);
 	}
 
 
-	template<typename T>
-	inline T ComponentFactory<T>::destroy()
-	{
-		return T();
-	}
 }
